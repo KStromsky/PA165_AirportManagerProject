@@ -47,3 +47,7 @@ h3,
     background-color: #34d8b9;
     border-color: #34d8b9;
 }
+
+.table tbody>tr>td.align-middle {
+    vertical-align: middle;
+}

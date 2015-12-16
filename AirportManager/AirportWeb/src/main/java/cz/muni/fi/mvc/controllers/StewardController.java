@@ -5,6 +5,7 @@
  */
 package cz.muni.fi.mvc.controllers;
 
+import cz.muni.fi.airport.enums.Gender;
 import cz.muni.fi.airportapi.dto.*;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
@@ -18,12 +19,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -42,6 +45,18 @@ public class StewardController {
 
     @Autowired
     private StewardFacade stewardFacade;
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+    
+    @ModelAttribute("genders")
+    public Gender[] colors() {
+        log.debug("genders()");
+        return Gender.values();
+    }
 
     /**
      * Creates form for Steward creation
@@ -50,7 +65,9 @@ public class StewardController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public String newSteward(Model model) {
-        model.addAttribute("stewardCreate", new StewardCreationalDTO());
+        StewardCreationalDTO stewardCreate = new StewardCreationalDTO();
+        stewardCreate.setEmploymentDate(new Date());
+        model.addAttribute("stewardCreate", stewardCreate);
         return "steward/new";
     }
 
@@ -88,7 +105,7 @@ public class StewardController {
         StewardDTO steward = stewardFacade.getStewardWithId(id);
         stewardFacade.removeSteward(id);
         redirectAttributes.addFlashAttribute("alert_success", "Steward with id: " + steward.getId() + " was deleted.");
-        return "redirect:" + uriBuilder.path("/steward/list").toUriString();
+        return "redirect:" + uriBuilder.path("/steward").toUriString();
     }
 
     /**
@@ -116,7 +133,7 @@ public class StewardController {
      * @param model display data
      * @return jsp page
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping()
     public String list(Model model) {
         model.addAttribute("stewards", stewardFacade.getAllStewards());
         return "steward/list";
