@@ -9,7 +9,6 @@ import cz.muni.fi.airportapi.dto.DestinationCreationalDTO;
 import cz.muni.fi.airportapi.dto.DestinationDTO;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
-import cz.muni.fi.airportservicelayer.config.ServiceTestConfiguration;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Michal Zbranek
  */
 @Import({FacadeTestConfiguration.class})
-@RequestMapping("/destination")
+@RequestMapping("destination")
 @Controller
 public class DestinationController {
     
@@ -48,7 +47,8 @@ public class DestinationController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public String newDestination(Model model) {
-        model.addAttribute("destinationCreate", new DestinationCreationalDTO());
+        DestinationCreationalDTO destinationCreate = new DestinationCreationalDTO();
+        model.addAttribute("destinationCreate", destinationCreate);
         return "destination/new";
     }
 
@@ -86,7 +86,7 @@ public class DestinationController {
         DestinationDTO destination = destinationFacade.getDestinationWithId(id);
         destinationFacade.removeDestination(id);
         redirectAttributes.addFlashAttribute("alert_success", "Destination with id: " + destination.getId() + " was deleted.");
-        return "redirect:" + uriBuilder.path("/destination/list").toUriString();
+        return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
 
     /**
@@ -113,7 +113,7 @@ public class DestinationController {
      * @param model display data
      * @return jsp page
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping()
     public String list(Model model) {
         model.addAttribute("destinations", destinationFacade.getAllDestinations());
         return "destination/list";
