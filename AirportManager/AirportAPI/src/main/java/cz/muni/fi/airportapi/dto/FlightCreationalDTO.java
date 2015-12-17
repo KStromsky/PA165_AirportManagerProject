@@ -34,18 +34,18 @@ public class FlightCreationalDTO {
     
     @NotNull
     @ManyToOne
-    private DestinationDTO origin;
+    private Long originId;
     
     @NotNull
     @ManyToOne
-    private DestinationDTO destination;
+    private Long destinationId;
     
     @NotNull
     @ManyToOne
-    private AirplaneDTO airplane;
+    private Long airplaneId;
     
     @ManyToMany
-    private List<StewardDTO> stewards = new ArrayList<StewardDTO>(); 
+    private List<Long> stewardsIds = new ArrayList<>(); 
     
     /**
      * @return the arrival
@@ -78,54 +78,54 @@ public class FlightCreationalDTO {
     /**
      * @return the origin
      */
-    public DestinationDTO getOrigin() {
-        return origin;
+    public Long getOriginId() {
+        return originId;
     }
 
     /**
      * @param origin the origin to set
      */
-    public void setOrigin(DestinationDTO origin) {
-        this.origin = origin;
+    public void setOriginId(Long origin) {
+        this.originId = origin;
     }
 
     /**
      * @return the destination
      */
-    public DestinationDTO getDestination() {
-        return destination;
+    public Long getDestinationId() {
+        return destinationId;
     }
 
     /**
      * @param destination the destination to set
      */
-    public void setDestination(DestinationDTO destination) {
-        this.destination = destination;
+    public void setDestinationId(Long destination) {
+        this.destinationId = destination;
     }
 
     /**
      * @return the airplane
      */
-    public AirplaneDTO getAirplane() {
-        return airplane;
+    public Long getAirplaneId() {
+        return airplaneId;
     }
 
     /**
      * @param airplane the airplane to set
      */
-    public void setAirplane(AirplaneDTO airplane) {
-        this.airplane = airplane;
+    public void setAirplaneId(Long airplane) {
+        this.airplaneId = airplane;
     }
     
     /**
      * @return the stewards
      */
-    public List<StewardDTO> getStewards() {
-        return Collections.unmodifiableList(stewards);
+    public List<Long> getStewardsIds() {
+        return stewardsIds;
     }
     
-    public void addSteward(StewardDTO s) {
-        stewards.add(s);
+    public void addStewardIds(Long s) {
+        stewardsIds.add(s);
     }
         
     @Override
@@ -133,9 +133,9 @@ public class FlightCreationalDTO {
         int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.getArrival());
         hash = 67 * hash + Objects.hashCode(this.getDeparture());
-        hash = 67 * hash + Objects.hashCode(this.getOrigin());
-        hash = 67 * hash + Objects.hashCode(this.getDestination());
-        hash = 67 * hash + Objects.hashCode(this.getAirplane());
+        hash = 67 * hash + Objects.hashCode(this.getOriginId());
+        hash = 67 * hash + Objects.hashCode(this.getDestinationId());
+        hash = 67 * hash + Objects.hashCode(this.getAirplaneId());
         return hash;
     }
     
@@ -154,13 +154,13 @@ public class FlightCreationalDTO {
         if (!Objects.equals(this.getDeparture(), other.getDeparture())) {
             return false;
         }
-        if (!Objects.equals(this.getDestination(), other.getDestination())) {
+        if (!Objects.equals(this.getDestinationId(), other.getDestinationId())) {
             return false;
         }
-        if (!Objects.equals(this.getOrigin(), other.getOrigin())) {
+        if (!Objects.equals(this.getOriginId(), other.getOriginId())) {
             return false;
         }
-        if (!Objects.equals(this.getAirplane(), other.getAirplane())) {
+        if (!Objects.equals(this.getAirplaneId(), other.getAirplaneId())) {
             return false;
         }
         return true;
