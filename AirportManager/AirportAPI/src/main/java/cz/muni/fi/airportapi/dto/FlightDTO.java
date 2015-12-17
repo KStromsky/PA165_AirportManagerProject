@@ -6,6 +6,7 @@
 package cz.muni.fi.airportapi.dto;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -140,15 +141,23 @@ public class FlightDTO {
     public Long getId() {
         return id;
     }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     /**
      * @return the stewards
      */
     public List<StewardDTO> getStewards() {
-        return Collections.unmodifiableList(stewards);
+        return stewards;
     }
     
     public void addSteward(StewardDTO s) {
         stewards.add(s);
+    }
+    
+    public void setStewards(List<StewardDTO> stewards) {
+        this.stewards = stewards;
     }
 }

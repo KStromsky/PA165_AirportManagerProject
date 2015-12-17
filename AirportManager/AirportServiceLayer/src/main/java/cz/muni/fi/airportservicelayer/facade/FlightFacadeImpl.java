@@ -58,6 +58,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public List<FlightDTO> getAllFlights() {
+        List<Flight> flights = flightService.findAll();
         return beanMappingservice.mapTo(flightService.findAll(), FlightDTO.class);
     }
 
