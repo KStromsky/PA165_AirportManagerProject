@@ -83,8 +83,19 @@ public class DestinationController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
-        DestinationDTO destination = destinationFacade.getDestinationWithId(id);
-        destinationFacade.removeDestination(id);
+        DestinationDTO destination;
+        try {
+            destination = destinationFacade.getDestinationWithId(id);
+            if (destination == null) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Destination with id: " + id + " does not exist.");
+                return "redirect:" + uriBuilder.path("/destination").toUriString();
+            }
+            destinationFacade.removeDestination(id);
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Destination with id: " + id + " cannot be deleted.");
+            return "redirect:" + uriBuilder.path("/destination").toUriString();
+        }
+
         redirectAttributes.addFlashAttribute("alert_success", "Destination with id: " + destination.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
