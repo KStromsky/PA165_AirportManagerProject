@@ -4,6 +4,7 @@ import cz.muni.fi.airport.entity.Airplane;
 import cz.muni.fi.airport.entity.Destination;
 import cz.muni.fi.airport.entity.Flight;
 import cz.muni.fi.airport.entity.Steward;
+import cz.muni.fi.airport.entity.User;
 import cz.muni.fi.airport.enums.Gender;
 import cz.muni.fi.airportservicelayer.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,18 @@ public class DataLoadingFacade {
 
     @Autowired
     private DestinationService destinationService;
-    
+
     @Autowired
     private AirplaneService airplaneService;
 
     @Autowired
     private FlightService flightService;
 
+    @Autowired
+    private UserService userService;
+
     public void loadData() throws ParseException {
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 
         Calendar cal = Calendar.getInstance();
@@ -55,24 +59,24 @@ public class DataLoadingFacade {
         a1.setCapacity(1);
         a1.setName("airA");
         a1.setType("typeA");
-        
+
         airplaneService.create(a1);
 
         Airplane a2 = new Airplane();
         a2.setCapacity(2);
         a2.setName("airB");
         a2.setType("typeB");
-        
+
         airplaneService.create(a2);
 
         Destination d1 = new Destination();
         d1.setLocation("Brno");
-        
+
         destinationService.create(d1);
 
         Destination d2 = new Destination();
         d2.setLocation("Praha");
-        
+
         destinationService.create(d2);
 
         Steward s1 = new Steward();
@@ -82,7 +86,7 @@ public class DataLoadingFacade {
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
         s1.setGender(Gender.MALE);
-        
+
         stewardService.createSteward(s1);
 
         Steward s2 = new Steward();
@@ -92,7 +96,7 @@ public class DataLoadingFacade {
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
         s2.setGender(Gender.MALE);
-        
+
         stewardService.createSteward(s2);
 
         Steward s3 = new Steward();
@@ -102,7 +106,7 @@ public class DataLoadingFacade {
         s3.setDateOfBirth(formatter.parse("1988/02/02"));
         s3.setEmploymentDate(formatter.parse("2014/03/01"));
         s3.setGender(Gender.FEMALE);
-        
+
         stewardService.createSteward(s3);
 
         Flight f1 = new Flight();
@@ -113,17 +117,27 @@ public class DataLoadingFacade {
         f1.setDestination(d2);
         f1.addSteward(s1);
         f1.addSteward(s2);
-        
+
         flightService.create(f1);
-        
+
         Flight f2 = new Flight();
         f2.setAirplane(a2);
         f2.setArrival(date3);
         f2.setDeparture(date2);
         f2.setOrigin(d2);
         f2.setDestination(d1);
-        f2.addSteward(s3); 
-        
+        f2.addSteward(s3);
+
         flightService.create(f2);
+
+        User user = new User();
+        user.setAdmin(false);
+        user.setUserName("user");
+        userService.registerUser(user, "user");
+
+        User admin = new User();
+        admin.setAdmin(true);
+        admin.setUserName("admin");
+        userService.registerUser(admin, "admin");
     }
 }

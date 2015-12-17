@@ -48,6 +48,7 @@
                         <li class="${pageContext.request.requestURI.contains("/destination") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/destination">Destinations</a></li>
                         <li class="${pageContext.request.requestURI.contains("/airplane") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/airplane">Airplanes</a></li>
                         <li class="${pageContext.request.requestURI.contains("/flight") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/flight">Flights</a></li>
+                        <li class="${pageContext.request.requestURI.contains("/user") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/user">Users</a></li>
                     </ul>
                 </div>
             </div>
