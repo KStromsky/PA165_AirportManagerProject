@@ -45,14 +45,14 @@
             <div class="form-group ${dateOfBirth_error?'has-error':''}">
                 <form:label path="dateOfBirth" cssClass="col-sm-1 control-label">Date of Birth</form:label>
                     <div class="col-sm-4">
-                    <form:input type="date" pattern="yyyy-MM-dd" path="dateOfBirth" cssClass="form-control"/>
+                    <form:input type="date" path="dateOfBirth" cssClass="form-control"/>
                     <form:errors path="dateOfBirth" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${enploymentDate_error?'has-error':''}">
                 <form:label path="employmentDate" cssClass="col-sm-1 control-label">Employment Date</form:label>
                     <div class="col-sm-4">
-                    <form:input type="date" pattern="yyyy-MM-dd" path="employmentDate" cssClass="form-control"/>
+                    <form:input type="date" path="employmentDate" cssClass="form-control"/>
                     <form:errors path="employmentDate" cssClass="help-block"/>
                 </div>
             </div>

@@ -7,7 +7,7 @@
 
 <my:pagetemplate title="Steward detail information">
     <jsp:attribute name="body">
-        <div class="row">
+        <div>
         <table class="table">
             <tr>
                 <td class="col-md-2"><b>ID</b></td>

@@ -6,10 +6,12 @@
 package cz.muni.fi.mvc.config;
 
 import cz.muni.fi.config.DataConfiguration;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -27,6 +29,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Import(DataConfiguration.class)
 @ComponentScan(basePackages = "cz.muni.fi.mvc.controllers")
 public class WebAppConfig extends WebMvcConfigurerAdapter {
+    
+    public static final String TEXTS = "Messages";
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -44,5 +48,12 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public Validator validator() {
         return new LocalValidatorFactoryBean();
+    }
+    
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename(TEXTS);
+        return messageSource;
     }
 }
