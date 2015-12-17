@@ -188,11 +188,11 @@ public class StewardServiceImpl implements StewardService {
         List<Steward> availableStewards = null;
         if (fromDate != null || toDate != null) {
             if (fromDate == null) {
-                fromDate = new Date();
+                fromDate = toDate;
             }
             
             if (toDate == null) {
-                toDate = new Date();
+                toDate = fromDate;
             }
             availableStewards = this.findAvailableStewards(fromDate, toDate);
         } else {

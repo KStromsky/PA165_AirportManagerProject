@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
 public class StewardCreationalDTO {
     
     @NotNull
-    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}")
+    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}", message = "Valid personal info has to be filled in. \n Example: A1C-123456")
     private String personalIdentificator;
     @NotNull
     @Size(min=1, max=50)
@@ -30,8 +31,10 @@ public class StewardCreationalDTO {
     @NotNull
     private Gender gender;
     @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date dateOfBirth;
     @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date employmentDate;
 
     /**

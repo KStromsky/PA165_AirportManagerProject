@@ -44,7 +44,11 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public StewardDTO getStewardWithPersonalIdentificator(String personalIdentificator) {
-        return beanMappingservice.mapTo(stewardService.findByPersonalIdentificator(personalIdentificator), StewardDTO.class);
+        Steward steward = stewardService.findByPersonalIdentificator(personalIdentificator);
+        if (steward == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(steward, StewardDTO.class);
     }
 
     @Override

@@ -11,6 +11,7 @@ import cz.muni.fi.airport.entity.Steward;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -54,8 +55,12 @@ public class StewardDaoImpl implements StewardDao {
 
     @Override
     public Steward findByIdentificator(String identificator) {
+        try {
         return em.createQuery("SELECT s FROM Steward s WHERE s.personalIdentificator like :pi ",
 				Steward.class).setParameter("pi", "%" + identificator + "%").getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
