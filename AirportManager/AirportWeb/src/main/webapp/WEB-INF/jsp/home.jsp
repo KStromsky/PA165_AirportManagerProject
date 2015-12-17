@@ -6,7 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="title" value="${Airport}"/>
+<c:set var="title" value="${\"Airport\"}"/>
 
 <%-- call my own tag defined in /WEB-INF/tags/pagetemplate.tag, provide title attribute --%>
 <my:pagetemplate title="${title}">

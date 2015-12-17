@@ -22,6 +22,7 @@ import cz.muni.fi.airportservicelayer.services.AirplaneService;
 import cz.muni.fi.airportservicelayer.services.BeanMappingService;
 import cz.muni.fi.airportservicelayer.services.DestinationService;
 import cz.muni.fi.airportservicelayer.services.FlightService;
+import cz.muni.fi.airportservicelayer.services.StewardService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,9 @@ public class FlightFacadeImpl implements FlightFacade {
     private AirplaneService airplaneService;
     
     @Autowired
+    private StewardService stewardService;
+    
+    @Autowired
     private BeanMappingService beanMappingservice;
     
     @Override
@@ -58,6 +62,7 @@ public class FlightFacadeImpl implements FlightFacade {
 
     @Override
     public List<FlightDTO> getAllFlights() {
+        List<Flight> flights = flightService.findAll();
         return beanMappingservice.mapTo(flightService.findAll(), FlightDTO.class);
     }
 
@@ -69,9 +74,12 @@ public class FlightFacadeImpl implements FlightFacade {
     @Override
     public Long createFlight(FlightCreationalDTO f) {
         Flight mappedF = beanMappingservice.mapTo(f, Flight.class);
-        for (Steward steward : beanMappingservice.mapTo(f.getStewards(), Steward.class)) {
-            mappedF.addSteward(steward);
+        for (Long stewardId : f.getStewardsIds()) {
+            mappedF.addSteward(stewardService.findById(stewardId));
         }
+        mappedF.setDestination(destinationService.findById(f.getDestinationId()));
+        mappedF.setOrigin(destinationService.findById(f.getOriginId()));
+        mappedF.setAirplane(airplaneService.findById(f.getAirplaneId()));
         flightService.create(mappedF);
         return mappedF.getId();
     }

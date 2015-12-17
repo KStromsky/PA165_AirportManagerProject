@@ -155,20 +155,20 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         stew2 = stewardFacade.getStewardWithId(stewardFacade.createSteward(s2));
         stew3 = stewardFacade.getStewardWithId(stewardFacade.createSteward(s3));
         
-        flightCreationalDTO1.setAirplane(air1);
+        flightCreationalDTO1.setAirplaneId(air1.getId());
         flightCreationalDTO1.setArrival(date2);
         flightCreationalDTO1.setDeparture(date1);
-        flightCreationalDTO1.setOrigin(dest1);
-        flightCreationalDTO1.setDestination(dest2);
-        flightCreationalDTO1.addSteward(stew1);
-        flightCreationalDTO1.addSteward(stew2);
+        flightCreationalDTO1.setOriginId(dest1.getId());
+        flightCreationalDTO1.setDestinationId(dest2.getId());
+        flightCreationalDTO1.addStewardIds(stew1.getId());
+        flightCreationalDTO1.addStewardIds(stew2.getId());
         
-        flightCreationalDTO2.setAirplane(air2);
+        flightCreationalDTO2.setAirplaneId(air2.getId());
         flightCreationalDTO2.setArrival(date3);
         flightCreationalDTO2.setDeparture(date2);
-        flightCreationalDTO2.setOrigin(dest2);
-        flightCreationalDTO2.setDestination(dest1);
-        flightCreationalDTO2.addSteward(stew1);
+        flightCreationalDTO2.setOriginId(dest2.getId());
+        flightCreationalDTO2.setDestinationId(dest1.getId());
+        flightCreationalDTO2.addStewardIds(stew1.getId());
         
         flightDTO.setAirplane(air1);
         flightDTO.setArrival(date2);

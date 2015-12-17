@@ -175,25 +175,25 @@ public class AirplaneFacadeTest extends AbstractTransactionalTestNGSpringContext
         Date between3 = cal.getTime();
         
         FlightCreationalDTO flightCreate1 = new FlightCreationalDTO();
-        flightCreate1.setAirplane(airplane1);
+        flightCreate1.setAirplaneId(airplane1.getId());
         flightCreate1.setDeparture(departure1);
         flightCreate1.setArrival(arrival1);
-        flightCreate1.setOrigin(dest1);
-        flightCreate1.setDestination(dest2);
+        flightCreate1.setOriginId(dest1.getId());
+        flightCreate1.setDestinationId(dest2.getId());
         
         FlightCreationalDTO flightCreate2 = new FlightCreationalDTO();
-        flightCreate2.setAirplane(airplane2);
+        flightCreate2.setAirplaneId(airplane2.getId());
         flightCreate2.setDeparture(departure2);
         flightCreate2.setArrival(arrival2);
-        flightCreate2.setOrigin(dest2);
-        flightCreate2.setDestination(dest3);
+        flightCreate2.setOriginId(dest2.getId());
+        flightCreate2.setDestinationId(dest3.getId());
         
         FlightCreationalDTO flightCreate3 = new FlightCreationalDTO();
-        flightCreate3.setAirplane(airplane1);
+        flightCreate3.setAirplaneId(airplane1.getId());
         flightCreate3.setDeparture(departure3);
         flightCreate3.setArrival(arrival3);
-        flightCreate3.setOrigin(dest3);
-        flightCreate3.setDestination(dest2);
+        flightCreate3.setOriginId(dest3.getId());
+        flightCreate3.setDestinationId(dest2.getId());
         
         FlightDTO flight1 = flightFacade.getFlightWithId(flightFacade.createFlight(flightCreate1));
         FlightDTO flight2 = flightFacade.getFlightWithId(flightFacade.createFlight(flightCreate2));
@@ -250,25 +250,25 @@ public class AirplaneFacadeTest extends AbstractTransactionalTestNGSpringContext
         
         
         FlightCreationalDTO flightCreate1 = new FlightCreationalDTO();
-        flightCreate1.setAirplane(airplane1);
+        flightCreate1.setAirplaneId(airplane1.getId());
         flightCreate1.setDeparture(departure1);
         flightCreate1.setArrival(arrival1);
-        flightCreate1.setOrigin(dest1);
-        flightCreate1.setDestination(dest2);
+        flightCreate1.setOriginId(dest1.getId());
+        flightCreate1.setDestinationId(dest2.getId());
         
         FlightCreationalDTO flightCreate2 = new FlightCreationalDTO();
-        flightCreate2.setAirplane(airplane1);
+        flightCreate2.setAirplaneId(airplane1.getId());
         flightCreate2.setDeparture(departure2);
         flightCreate2.setArrival(arrival2);
-        flightCreate2.setOrigin(dest2);
-        flightCreate2.setDestination(dest3);
+        flightCreate2.setOriginId(dest2.getId());
+        flightCreate2.setDestinationId(dest3.getId());
         
         FlightCreationalDTO flightCreate3 = new FlightCreationalDTO();
-        flightCreate3.setAirplane(airplane2);
+        flightCreate3.setAirplaneId(airplane2.getId());
         flightCreate3.setDeparture(departure3);
         flightCreate3.setArrival(arrival3);
-        flightCreate3.setOrigin(dest3);
-        flightCreate3.setDestination(dest2);
+        flightCreate3.setOriginId(dest3.getId());
+        flightCreate3.setDestinationId(dest2.getId());
         
         FlightDTO flight1 = flightFacade.getFlightWithId(flightFacade.createFlight(flightCreate1));
         FlightDTO flight2 = flightFacade.getFlightWithId(flightFacade.createFlight(flightCreate2));
