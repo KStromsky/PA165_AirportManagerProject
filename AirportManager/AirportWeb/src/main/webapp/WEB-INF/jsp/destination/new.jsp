@@ -1,3 +1,4 @@
+<%-- author: Michal Zbranek --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="true" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -18,7 +19,7 @@
                 </div>
             </div>
             <div class="form-group col-sm-4">
-                <a href="${pageContext.request.contextPath}/location" class="btn btn-danger">Back</a>
+                <a href="${pageContext.request.contextPath}/destination" class="btn btn-danger">Back</a>
                 <button class="btn btn-primary" type="submit">Create destination</button>
             </div>
         </form:form>
