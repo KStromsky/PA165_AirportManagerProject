@@ -9,23 +9,43 @@
     <jsp:attribute name="body">
 
         <div class="form-group row">
-            <div class="col-md-2">
+            <div class="col-md-12">
                 <a href="${pageContext.request.contextPath}/steward/new" class="btn btn-primary">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                New Steward
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    New Steward
                 </a>
             </div>
-
+            <div class="col-md-12">
+                    <label> </label>
+                </div>
             <form action="${pageContext.request.contextPath}/steward">
-<!--                <div class="col-md-offset-4 col-md-2 col-xs-4">
-                    <select class="form-control" name="loanable">
-                        <option value="true" {param.loanable ? 'selected' : ''}>Loanable</option>
-                        <option value="false" {empty param.loanable || param.loanable ? '' : 'selected'}>Unloanable</option>
 
+                <div class="col-md-2">
+                    <label>Available From</label>
+                    <input class="form-control" type="date" name="dateFromStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateFromStr}">
+                </div>
+                <div class="col-md-2">
+                    <label>Available To</label>
+                    <input class="form-control" type="date" name="dateToStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateToStr}">
+                </div>
+                <div class="col-md-3">
+                    <label>Destination</label>
+                    <select class="form-control" name="destination">
+                        <option value="" selected>None</option>
+                        <c:forEach items="${destinations}" var="destination">
+                            <option value="${destination.id}" ${param.destination == destination.id ? 'selected' : ''}>${destination.location}</option>
+                        </c:forEach>
                     </select>
-                </div>-->
-                <div class="col-md-1">
-                    <button class="btn btn-primary" type="submit">Filter</button>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="col-md-12">&nbsp; </label>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary btn-block" type="submit">Filter</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="${pageContext.request.contextPath}/steward" class="btn btn-danger btn-block">Clear</a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -33,28 +53,30 @@
 
         <table class="table table-hover table-condensed fixed">
             <thead>
-            <tr>
-                <th>PersonalIdentificator</th>
-                <th>First Name</th>
-                <th>Surname</th>
-            </tr>
+                <tr>
+                    <th>PersonalIdentificator</th>
+                    <th>First Name</th>
+                    <th>Surname</th>
+                    <th>Flights Count</th>
+                </tr>
             </thead>
             <tbody>
-            <c:forEach items="${stewards}" var="steward">
-                <tr>
-                    <td class="col-md-2"><c:out value="${steward.personalIdentificator}"/></td>
-                    <td class="col-md-3"><c:out value="${steward.firstname}"/></td>
-                    <td class="col-md-3"><c:out value="${steward.surname}"/></td>
-                    <td class="col-md-1">
-                        <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
-                    </td>
-                    <td class="col-md-1">
-                        <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">
-                            <button type="submit" class="btn btn-primary">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
+                <c:forEach items="${stewards}" var="steward">
+                    <tr>
+                        <td class="col-md-2"><c:out value="${steward.personalIdentificator}"/></td>
+                        <td class="col-md-2"><c:out value="${steward.firstname}"/></td>
+                        <td class="col-md-2"><c:out value="${steward.surname}"/></td>
+                        <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
+                        <td class="col-md-1">
+                            <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
+                        </td>
+                        <td class="col-md-1">
+                            <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">
+                                <button type="submit" ${stewardsFlights.get(steward.id).size() > 0 ? "disabled" : ""} class="btn btn-primary">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
             </tbody>
         </table>
 
