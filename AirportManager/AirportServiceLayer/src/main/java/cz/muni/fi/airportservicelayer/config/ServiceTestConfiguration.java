@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(basePackageClasses={StewardServiceImpl.class, 
                                    DestinationServiceImpl.class,
                                    AirplaneServiceImpl.class,
-                                   FlightServiceImpl.class, })
+                                   FlightServiceImpl.class,
+                                   UserServiceImpl.class})
 public class ServiceTestConfiguration {
 	
 
