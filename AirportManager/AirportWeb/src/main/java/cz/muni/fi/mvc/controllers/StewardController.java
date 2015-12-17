@@ -123,8 +123,19 @@ public class StewardController {
             }
             return "steward/new";
         }
-        Long id = stewardFacade.createSteward(formBean);
-        redirectAttributes.addFlashAttribute("alert_info", "Steward with id: " + id + " was created");
+        try {
+            if (stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()) != null) {
+                bindingResult.addError(new FieldError("stewardCreate", "personalIdentificator", "Personal identificator already exists."));
+                model.addAttribute("personalIdentificator_error", true);
+                return "steward/new";
+            }
+
+            Long id = stewardFacade.createSteward(formBean);
+            redirectAttributes.addFlashAttribute("alert_info", "Steward with id: " + id + " was created");
+        } catch (Exception ex) {
+            model.addAttribute("alert_danger", "Steward was not created because of some unexpected error");
+            redirectAttributes.addFlashAttribute("alert_danger", "Steward was not created because of some unexpected error");
+        }
         return "redirect:" + uriBuilder.path("/steward").toUriString();
     }
 
@@ -137,8 +148,20 @@ public class StewardController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
-        StewardDTO steward = stewardFacade.getStewardWithId(id);
-        stewardFacade.removeSteward(id);
+
+        StewardDTO steward;
+        try {
+            steward = stewardFacade.getStewardWithId(id);
+            if (steward == null) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Steward with id: " + id + " does not exist.");
+                return "redirect:" + uriBuilder.path("/steward").toUriString();
+            }
+            stewardFacade.removeSteward(id);
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Steward with id: " + id + " cannot be deleted.");
+            return "redirect:" + uriBuilder.path("/steward").toUriString();
+        }
+
         redirectAttributes.addFlashAttribute("alert_success", "Steward with id: " + steward.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/steward").toUriString();
     }
@@ -194,76 +217,82 @@ public class StewardController {
     public String list(@RequestParam(value = "destination", required = false) Long locationId,
             @RequestParam(value = "dateFromStr", required = false) String dateFromStr,
             @RequestParam(value = "dateToStr", required = false) String dateToStr,
+            @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        formatter.setLenient(false);
-        
-        Date dateFrom = null;
-        if (dateFromStr != null && !dateFromStr.isEmpty()) {
-            try {
-                dateFrom = formatter.parse(dateFromStr);
-            } catch (ParseException ex) {
-                log.debug("Parsing error - ignoring From Date", ex);
-                redirectAttributes.addFlashAttribute("alert_danger", "Available From is not a valid Date! ( " + dateFromStr  + " )");
 
-                StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
-                sb.append("?");
-                if (locationId != null) {
-                    sb.append("destination=").append(locationId);
-                    sb.append("&");
-                }
-                if (dateToStr != null && !dateToStr.isEmpty()) {
-                    sb.append("dateToStr=").append(dateToStr);
-                    sb.append("&");
-                }
-                sb.delete(sb.length() - 1, sb.length());
-                return sb.toString();
-            }
-        }
         Date dateTo = null;
-        if (dateToStr != null && !dateToStr.isEmpty()) {
-            try {
-                dateTo = formatter.parse(dateToStr);
-            } catch (ParseException ex) {
-                log.debug("Parsing error - ignoring To Date", ex);
-                redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date! ( " + dateToStr  + " )");
-                StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
-                sb.append("?");
-                if (locationId != null) {
-                    sb.append("destination=").append(locationId);
-                    sb.append("&");
-                }
-                if (dateFromStr != null && !dateFromStr.isEmpty()) {
-                    sb.append("dateFromStr=").append(dateFromStr);
-                    sb.append("&");
-                }
-                sb.delete(sb.length() - 1, sb.length());
-                return sb.toString();
-            }
-        }
+        Date dateFrom = null;
 
-        if (dateFrom != null && dateTo != null && dateFrom.compareTo(dateTo) > 0) {
-            redirectAttributes.addFlashAttribute("alert_danger", "From Date is later than To Date");
-            StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
-            sb.append("?");
-            if (locationId != null) {
-                sb.append("destination=").append(locationId);
-                sb.append("&");
-            }
-            sb.append("dateFromStr=").append(dateFromStr);
+        StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
+        sb.append("?");
+        if (locationId != null) {
+            sb.append("destination=" + locationId);
             sb.append("&");
-            sb.append("dateToStr=").append(dateFromStr);
-            return sb.toString();
         }
+        if (dateFromStr != null && !dateFromStr.isEmpty()) {
+            sb.append("dateFromStr=" + dateFromStr);
+            sb.append("&");
+        }
+        if (dateToStr != null && !dateToStr.isEmpty()) {
+            sb.append("dateToStr=" + dateToStr);
+            sb.append("&");
+        }
+        sb.append("invalid=true");
 
-        List<StewardDTO> stewards = stewardFacade.findSpecificStewards(dateFrom, dateTo, locationId);
-        model.addAttribute("stewards", stewards);
-        Map<Long, List<FlightDTO>> stewardsFlights = new HashMap<>();
-        for (StewardDTO steward : stewards) {
-            stewardsFlights.put(steward.getId(), stewardFacade.getStewardFlights(steward.getId()));
+        String returnURI = sb.toString();
+
+        if (!invalid) {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            formatter.setLenient(false);
+            if (dateFromStr != null && !dateFromStr.isEmpty()) {
+                try {
+                    dateFrom = formatter.parse(dateFromStr);
+                } catch (ParseException ex) {
+                    log.debug("Parsing error - ignoring From Date", ex);
+                    redirectAttributes.addFlashAttribute("alert_danger", "Available From is not a valid Date!");
+                    return returnURI;
+                }
+            }
+            if (dateToStr != null && !dateToStr.isEmpty()) {
+                try {
+                    dateTo = formatter.parse(dateToStr);
+                } catch (ParseException ex) {
+                    log.debug("Parsing error - ignoring To Date", ex);
+                    redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
+                    return returnURI;
+                }
+            }
+
+            if (dateFrom != null && dateTo != null && dateFrom.compareTo(dateTo) > 0) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Available From is later than Available To");
+                return returnURI;
+            }
+
+            try {
+                if (locationId != null && destinationFacade.getDestinationWithId(locationId) == null) {
+                    locationId = null;
+                }
+
+                List<StewardDTO> stewards = stewardFacade.findSpecificStewards(dateFrom, dateTo, locationId);
+                model.addAttribute("stewards", stewards);
+                Map<Long, List<FlightDTO>> stewardsFlights = new HashMap<>();
+                for (StewardDTO steward : stewards) {
+                    stewardsFlights.put(steward.getId(), stewardFacade.getStewardFlights(steward.getId()));
+                }
+                model.addAttribute("stewardsFlights", stewardsFlights);
+            } catch (Exception e) {
+                log.debug("Service error - ignoring To Date", e);
+                redirectAttributes.addFlashAttribute("alert_danger", "Error while processing request");
+                return returnURI;
+            }
         }
-        model.addAttribute("stewardsFlights", stewardsFlights);
-        model.addAttribute("destinations", destinationFacade.getAllDestinations());
-        return "steward/list";
+        try {
+            model.addAttribute("destinations", destinationFacade.getAllDestinations());
+            return "steward/list";
+        } catch (Exception e) {
+            log.debug("Service error - ignoring To Date", e);
+            redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
+            return "redirect:" + uriBuilder.toUriString();
+        }
     }
 }
