@@ -70,8 +70,19 @@ public class DestinationController {
             }
             return "destination/new";
         }
-        Long id = destinationFacade.createDestination(formBean);
-        redirectAttributes.addFlashAttribute("alert_info", "Destination with id: " + id + " was created");
+        try {
+            if (destinationFacade.getDestinationWithLocation(formBean.getLocation()) == null) {
+                bindingResult.addError(new FieldError("destinationCreate", "location", "Destination was not created because it already exists."));
+                model.addAttribute("location_error", true);
+                return "destination/new";
+            }
+
+            Long id = destinationFacade.createDestination(formBean);
+            redirectAttributes.addFlashAttribute("alert_info", "Destination with id: " + id + " was created");
+        } catch (Exception ex) {
+            model.addAttribute("alert_danger", "Destination was not created because of some unexpected error");
+            redirectAttributes.addFlashAttribute("alert_danger", "Destination was not created because it already exists.");
+        }
         return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
     

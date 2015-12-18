@@ -124,8 +124,12 @@ public class FlightCreationalDTO {
         return stewardsIds;
     }
     
-    public void addStewardIds(Long s) {
-        stewardsIds.add(s);
+    public void setStewardsIds(List<Long> stewardsIds) {
+        this.stewardsIds = stewardsIds;
+    }
+    
+    public void addStewardIds(Long id) {
+        stewardsIds.add(id);
     }
         
     @Override
