@@ -25,9 +25,6 @@
 
                     </select>
                 </div>-->
-                <div class="col-md-1">
-                    <button class="btn btn-primary" type="submit">Filter</button>
-                </div>
             </form>
         </div>
         <hr>
