@@ -11,6 +11,7 @@ import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import cz.muni.fi.airportservicelayer.config.ServiceTestConfiguration;
+import cz.muni.fi.mvc.forms.StewardCreationalDTOValidator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -81,13 +82,23 @@ public class StewardController {
     protected void initBinder(WebDataBinder binder) {
         CustomDateFormater dateFormat = new CustomDateFormater("yyyy-MM-dd");
         dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));    
+        if (binder.getTarget() instanceof StewardCreationalDTO) {
+            binder.addValidators(new StewardCreationalDTOValidator(stewardFacade));
+        }
     }
 
     @ModelAttribute("genders")
     public Gender[] colors() {
         log.debug("genders()");
         return Gender.values();
+    }
+    
+    @ModelAttribute("dateNow")
+    public String dateNow() {
+        log.debug("colors");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(new Date());
     }
 
     /**
@@ -99,7 +110,6 @@ public class StewardController {
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public String newSteward(Model model) {
         StewardCreationalDTO stewardCreate = new StewardCreationalDTO();
-        stewardCreate.setEmploymentDate(new Date());
         model.addAttribute("stewardCreate", stewardCreate);
         return "steward/new";
     }
@@ -124,11 +134,14 @@ public class StewardController {
             return "steward/new";
         }
         try {
-            if (stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()) != null) {
-                bindingResult.addError(new FieldError("stewardCreate", "personalIdentificator", "Personal identificator already exists."));
-                model.addAttribute("personalIdentificator_error", true);
-                return "steward/new";
-            }
+//            if (stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()) != null) {
+//                bindingResult.addError(new FieldError("stewardCreate", "personalIdentificator",
+//                        formBean.getPersonalIdentificator(), false, 
+//                        new String[]{"StewardCreationalDTOValidator.invalid.personalIdetificator"}, 
+//                        null, "Personal identificator already exists."));
+//                model.addAttribute("personalIdentificator_error", true);
+//                return "steward/new";
+//            }
 
             Long id = stewardFacade.createSteward(formBean);
             redirectAttributes.addFlashAttribute("alert_info", "Steward with id: " + id + " was created");
@@ -218,10 +231,11 @@ public class StewardController {
             @RequestParam(value = "dateFromStr", required = false) String dateFromStr,
             @RequestParam(value = "dateToStr", required = false) String dateToStr,
             @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) throws IllegalAccessException {
 
         Date dateTo = null;
         Date dateFrom = null;
+        
 
         StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
         sb.append("?");

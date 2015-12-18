@@ -49,10 +49,10 @@
                     <form:errors path="dateOfBirth" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${enploymentDate_error?'has-error':''}">
+            <div class="form-group ${employmentDate_error?'has-error':''}">
                 <form:label path="employmentDate" cssClass="col-sm-1 control-label">Employment Date</form:label>
                     <div class="col-sm-4">
-                    <form:input type="date" path="employmentDate" cssClass="form-control"/>
+                    <form:input type="date" path="employmentDate" cssClass="form-control" value="${dateNow}"/>
                     <form:errors path="employmentDate" cssClass="help-block"/>
                 </div>
             </div>

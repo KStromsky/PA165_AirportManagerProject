@@ -42,6 +42,7 @@
                 </tr>
             </table>
             <c:if test="${flights.size() > 0}">
+                <h2 class="col-md-12">Flights</h2>
                 <table class="table">
                     <thead>
                         <tr>
