@@ -175,7 +175,7 @@ public class StewardController {
             return "redirect:" + uriBuilder.path("/steward").toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", "Steward with id: " + steward.getId() + " was deleted.");
+        redirectAttributes.addFlashAttribute("alert_info", "Steward with id: " + steward.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/steward").toUriString();
     }
 
@@ -295,7 +295,6 @@ public class StewardController {
                 }
                 model.addAttribute("stewardsFlights", stewardsFlights);
             } catch (Exception e) {
-                log.debug("Service error - ignoring To Date", e);
                 redirectAttributes.addFlashAttribute("alert_danger", "Error while processing request");
                 return returnURI;
             }
@@ -304,9 +303,8 @@ public class StewardController {
             model.addAttribute("destinations", destinationFacade.getAllDestinations());
             return "steward/list";
         } catch (Exception e) {
-            log.debug("Service error - ignoring To Date", e);
-            redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
-            return "redirect:" + uriBuilder.toUriString();
+            redirectAttributes.addFlashAttribute("alert_danger", "Destinations unloadable");
+            return returnURI;
         }
     }
 }

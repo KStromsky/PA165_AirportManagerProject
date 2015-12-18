@@ -107,7 +107,7 @@ public class DestinationController {
             return "redirect:" + uriBuilder.path("/destination").toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", "Destination with id: " + destination.getId() + " was deleted.");
+        redirectAttributes.addFlashAttribute("alert_info", "Destination with id: " + destination.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
 

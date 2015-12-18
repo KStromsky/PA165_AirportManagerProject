@@ -10,14 +10,48 @@
         <div class="form-group row">
             <div class="col-md-2">
                 <a href="${pageContext.request.contextPath}/flight/new" class="btn btn-primary">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                New Flight
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    New Flight
                 </a>
             </div>
         </div>
-        <hr>
-        <table class="table table-hover table-condensed fixed">
-            <thead>
+        <div class="col-md-12">
+            <label> </label>
+        </div>
+        <form action="${pageContext.request.contextPath}/flight">
+
+            <div class="col-md-3">
+                <label>Location Type</label>
+                <select name="locationType" Class="form-control">
+                    <c:forEach items="${locations}" var="l">
+                        <option value="${l}" ${param.locationType == l ? 'selected' : ''}>${l.toString().toLowerCase()}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Location</label>
+                <select class="form-control" name="location">
+                    <option value="" selected>None</option>
+                    <c:forEach items="${destinations}" var="location">
+                        <option value="${location.id}" ${param.location == location.id ? 'selected' : ''}>${location.location}</option>
+                    </c:forEach>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="col-md-12">&nbsp; </label>
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-block" type="submit">Filter</button>
+                </div>
+                <div class="col-md-2">
+                    <a href="${pageContext.request.contextPath}/steward" class="btn btn-danger btn-block">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <table class="table table-hover table-condensed fixed">
+        <thead>
             <tr>
                 <th>Arrival</th>
                 <th>Departure</th>
@@ -26,8 +60,8 @@
                 <th>Airplane</th>
                 <th>Stewards</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <c:forEach items="${flights}" var="flight">
                 <tr>
                     <td class="col-md-2"><c:out value="${flight.arrival}"/></td>
@@ -46,7 +80,7 @@
                     </td>
                 </tr>
             </c:forEach>
-            </tbody>
-        </table>
-    </jsp:attribute>
+        </tbody>
+    </table>
+</jsp:attribute>
 </my:pagetemplate>

@@ -1,16 +1,25 @@
 package cz.muni.fi.mvc.controllers;
 
+import cz.muni.fi.airport.entity.Destination;
+import cz.muni.fi.airport.enums.Location;
+import cz.muni.fi.airportapi.dto.DestinationDTO;
 import cz.muni.fi.airportapi.dto.FlightCreationalDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
+import cz.muni.fi.airportapi.dto.StewardDTO;
 import cz.muni.fi.airportapi.facade.AirplaneFacade;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.FlightFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
+import static cz.muni.fi.mvc.controllers.StewardController.log;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +122,7 @@ public class FlightController {
     public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
         FlightDTO flight = flightFacade.getFlightWithId(id);
         flightFacade.removeFlight(id);
-        redirectAttributes.addFlashAttribute("alert_success", "Flight with id: " + flight.getId() + " was deleted.");
+        redirectAttributes.addFlashAttribute("alert_info", "Flight with id: " + flight.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/flight").toUriString();
     }
     
@@ -141,9 +150,80 @@ public class FlightController {
      * @param model display data
      * @return jsp page
      */
+//    @RequestMapping()
+//    public String list(Model model) {
+//        model.addAttribute("flights", flightFacade.getAllFlights());
+//        return "flight/list";
+//    }
+    
+    @ModelAttribute("locations")
+    public Location[] locations() {
+        log.debug("locations()");
+        return Location.values();
+    }
+    
+    /**
+     * Shows a list of flights which are available at given location 
+     *
+     * @param locationType specifies, if it is for Origin, or Destination
+     * @param locationId id of location, for which we want to find flights
+     * @param model display data
+     * @return jsp page
+     */
     @RequestMapping()
-    public String list(Model model) {
-        model.addAttribute("flights", flightFacade.getAllFlights());
-        return "flight/list";
+    public String list(
+            @RequestParam(value = "locationType", required = false, defaultValue = "NONE") Location locationType,
+            @RequestParam(value = "location", required = false) Long locationId,
+            @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) throws IllegalAccessException {
+
+        StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/flight").toUriString());
+        sb.append("?");
+        if (locationId != null) {
+            sb.append("locationType=").append(locationType);
+            sb.append("&");
+        }
+        if (locationId != null) {
+            sb.append("location=").append(locationId);
+            sb.append("&");
+        }
+        sb.append("invalid=true");
+
+        String returnURI = sb.toString();
+
+        if (!invalid) {
+            try {
+                
+                DestinationDTO destination = null;
+                
+                if (locationId != null) {
+                    destination = destinationFacade.getDestinationWithId(locationId);
+                }
+
+                List<FlightDTO> flights = new ArrayList<>();
+                
+                
+                if (destination == null || locationType == Location.NONE) {
+                    flights = flightFacade.getAllFlights();
+                } 
+                else if (locationType == Location.DESTINATION) {
+                    flights = flightFacade.getFlightsByDestination(destination);
+                }
+                else if (locationType == Location.ORIGIN) {
+                    flights = flightFacade.getFlightsByOrigin(destination);
+                }
+                model.addAttribute("flights", flights);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("alert_danger", "Error while processing request");
+                return returnURI;
+            }
+        }
+        try {
+            model.addAttribute("destinations", destinationFacade.getAllDestinations());
+            return "flight/list";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Destinations unloadable");
+            return returnURI;
+        }
     }
 }

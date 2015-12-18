@@ -160,7 +160,7 @@ public class AirplaneController {
             return "redirect:" + uriBuilder.path("/airplane").toUriString();
         }
 
-        redirectAttributes.addFlashAttribute("alert_success", "Airplane with id: " + airplaneDTO.getId() + " was deleted.");
+        redirectAttributes.addFlashAttribute("alert_info", "Airplane with id: " + airplaneDTO.getId() + " was deleted.");
         return "redirect:" + uriBuilder.path("/airplane").toUriString();
     }
 
@@ -266,7 +266,6 @@ public class AirplaneController {
                 }
                 model.addAttribute("airplaneFlights", airplanesFlights);
             } catch (Exception e) {
-                log.debug("Service error - ignoring To Date", e);
                 redirectAttributes.addFlashAttribute("alert_danger", "Error while processing request");
                 return returnURI;
             }
@@ -275,9 +274,8 @@ public class AirplaneController {
             model.addAttribute("destinations", destinationFacade.getAllDestinations());
             return "airplane/list";
         } catch (Exception e) {
-            log.debug("Service error - ignoring To Date", e);
-            redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
-            return "redirect:" + uriBuilder.toUriString();
+            redirectAttributes.addFlashAttribute("alert_danger", "Destinations unloadable");
+            return returnURI;
         }
     }
     
