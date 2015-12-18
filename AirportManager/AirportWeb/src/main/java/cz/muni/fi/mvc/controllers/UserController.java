@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Created with IntelliJ IDEA.
  *
- * @author Martin Kuba makub@ics.muni.cz
+ * @author Sebastian Kupka
  */
 @Controller
 @RequestMapping("/user")
