@@ -11,6 +11,8 @@ import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import static cz.muni.fi.mvc.controllers.StewardController.log;
+import cz.muni.fi.mvc.forms.AirplaneCreationalDTOValidator;
+import cz.muni.fi.mvc.forms.StewardCreationalDTOValidator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +85,9 @@ public class AirplaneController {
         AirplaneController.CustomDateFormater dateFormat = new AirplaneController.CustomDateFormater("yyyy-MM-dd");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        if (binder.getTarget() instanceof AirplaneCreationalDTO) {
+            binder.addValidators(new AirplaneCreationalDTOValidator(airplaneFacade));
+        }
     }
 
     /**
@@ -117,11 +122,11 @@ public class AirplaneController {
             return "airplane/new";
         }
         try {
-            if (airplaneFacade.getAirplaneWithName(formBean.getName()) != null) {
-                bindingResult.addError(new FieldError("airplaneCreate", "airplaneName", "Airplane with given name already exists"));
-                model.addAttribute("airplaneName_error", true);
-                return "airplane/new";
-            }
+//            if (airplaneFacade.getAirplaneWithName(formBean.getName()) != null) {
+//                bindingResult.addError(new FieldError("airplaneCreate", "airplaneName", "Airplane with given name already exists"));
+//                model.addAttribute("airplaneName_error", true);
+//                return "airplane/new";
+//            }
             
             Long id = airplaneFacade.createAirplane(formBean);
             redirectAttributes.addFlashAttribute("alert_info", "Airplane with id: " + id + " was created");
@@ -182,9 +187,10 @@ public class AirplaneController {
      * Shows a list of airplanes which are available at given location at given
      * time.
      *
-     * @param locationId identificator of lacation, for which we want to find airplane(s)
+     * @param location identificator of location, for which we want to find airplane(s)
      * @param dateFromStr available from date
      * @param dateToStr available to date
+     * @param capacity mininal capacity of flight
      * @param model display data
      * @return jsp page
      */ 
@@ -192,7 +198,7 @@ public class AirplaneController {
     public String list(@RequestParam(value = "destination", required = false) String location,
             @RequestParam(value = "dateFromStr", required = false) String dateFromStr,
             @RequestParam(value = "dateToStr", required = false) String dateToStr,
-            @RequestParam(value = "capacity", required = false) Integer capacity,
+            @RequestParam(value = "capacity", required = false, defaultValue = "0") int capacity,
             @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
 
@@ -213,7 +219,7 @@ public class AirplaneController {
             sb.append("dateToStr=" + dateToStr);
             sb.append("&");
         }
-        if (capacity != null) {
+        if (capacity > 0) {
             sb.append("capacity=" + capacity);
             sb.append("&");
         }
@@ -247,9 +253,9 @@ public class AirplaneController {
                 redirectAttributes.addFlashAttribute("alert_danger", "Available From is later than Available To");
                 return returnURI;
             }
-
+            
             try {
-                if (location != null && destinationFacade.getDestinationWithLocation(location).get(0) == null) {
+                if (location != null && destinationFacade.getDestinationWithLocation(location).isEmpty()) {
                     location = null;
                 }
                 List<AirplaneDTO> airplanes = airplaneFacade.getSpecificAirplanes(dateFrom, dateTo, capacity, location); 

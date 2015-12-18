@@ -11,8 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 /**
- * The place for validation checks. Useful for checks involving multiple
- * properties at once.
+ * Validates, if there is already a steward with given Personal Ident
+ * @author Sebastian Kupka
  */
 public class StewardCreationalDTOValidator implements Validator {
     

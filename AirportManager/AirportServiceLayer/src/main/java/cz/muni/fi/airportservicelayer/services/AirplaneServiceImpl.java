@@ -105,13 +105,19 @@ public class AirplaneServiceImpl implements AirplaneService {
     //Advanced service
     @Override
     public List<Airplane> findSpecificAirplanes(Date fromDate, Date toDate, int capacity, String location) {
-        try {     
-            List<Airplane> availableAirplanes = airplaneDao.findAvailableAirplanes(fromDate, toDate);           
+        try { 
+            List<Airplane> availableAirplanes;
+            if (fromDate != null && toDate != null) {
+                availableAirplanes = airplaneDao.findAvailableAirplanes(fromDate, toDate); 
+            } else {
+                availableAirplanes = airplaneDao.findAllAirplanes();    
+            }
             List<Airplane> specificAirplanes = new ArrayList<>();
             for(Airplane airplane : availableAirplanes) {
                 if (airplane.getCapacity() >= capacity
                         && (location == null || 
-                        location.equals(airplaneDao.findAirplaneFlights(airplane).get(0).getDestination().getLocation()))) {
+                        (!airplaneDao.findAirplaneFlights(airplane).isEmpty() &&
+                        location.equals(airplaneDao.findAirplaneFlights(airplane).get(0).getDestination().getLocation())))) {
                     specificAirplanes.add(airplane);
                 }
             }

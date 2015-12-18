@@ -34,12 +34,16 @@
                     <label>Available To</label>
                     <input class="form-control" type="date" name="dateToStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateToStr}">
                 </div>
+                <div class="col-md-1">
+                    <label>Capacity</label>
+                    <input class="form-control" type="number" min="0" max="100000" name="capacity"  value="${param.capacity}">
+                </div>
                 <div class="col-md-3">
                     <label>Destination</label>
                     <select class="form-control" name="destination">
                         <option value="" selected>None</option>
                         <c:forEach items="${destinations}" var="destination">
-                            <option value="${destination.id}" ${param.destination == destination.id ? 'selected' : ''}>${destination.location}</option>
+                            <option value="${destination.location}" ${param.destination == destination.location ? 'selected' : ''}>${destination.location}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -63,6 +67,7 @@
                     <th>Airplane name</th>
                     <th>Capacity</th>
                     <th>Airplane type</th>
+                    <th>Flights</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,12 +76,13 @@
                         <td class="col-md-2"><c:out value="${airplane.name}"/></td>
                         <td class="col-md-2"><c:out value="${airplane.capacity}"/></td>
                         <td class="col-md-2"><c:out value="${airplane.type}"/></td>
+                        <td class="col-md-1"><c:out value="${airplaneFlights.get(airplane.id).size()}"/></td>
                         <td class="col-md-1">
                             <a href="${pageContext.request.contextPath}/airplane/detail/${airplane.id}" class="btn btn-info btn-block">View</a>
                         </td>
                         <td class="col-md-1">
                             <form method="post" action="${pageContext.request.contextPath}/airplane/delete/${airplane.id}">
-                                <button type="submit" class="btn btn-primary">Delete</button>
+                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary">Delete</button>
                             </form>
                         </td>
                     </tr>

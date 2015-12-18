@@ -89,7 +89,7 @@ public class StewardController {
     }
 
     @ModelAttribute("genders")
-    public Gender[] colors() {
+    public Gender[] genders() {
         log.debug("genders()");
         return Gender.values();
     }
