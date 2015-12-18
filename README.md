@@ -22,6 +22,6 @@ Project in Java for PA165 - Vývoj programových systémů v jazyce Java
 
   $ curl -i -X GET http://localhost:8080/AirportREST/airplane/name/{$name}
 
-**Command for creation new airplane**
+**Command for create new airplane:**
   
   $ curl -X POST -i -H "Content-Type: application/json" --data '{"name":"{$NAME}","capacity":"{$CAPACITY}","type":"$TYPE"}' http://localhost:8080/AirportREST/airplane/create
