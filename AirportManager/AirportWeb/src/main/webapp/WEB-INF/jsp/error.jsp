@@ -1,4 +1,4 @@
-<%-- author: Milan Skipala --%>
+<%-- author: Sebastian Kupka --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="true" %>
 <%-- declare my own tags --%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
