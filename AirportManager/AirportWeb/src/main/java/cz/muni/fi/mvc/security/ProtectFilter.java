@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Protects administrative part of application.
  *
- * @author Martin Kuba makub@ics.muni.cz
+ * @author Jakub Stromský
  */
 @WebFilter(urlPatterns = {"/steward/*", "/flight/*", "/destination/*", "/airplane/*"})
 public class ProtectFilter implements Filter {
