@@ -7,6 +7,7 @@ package cz.muni.fi.mvc.controllers;
 
 import cz.muni.fi.airportapi.dto.DestinationCreationalDTO;
 import cz.muni.fi.airportapi.dto.DestinationDTO;
+import cz.muni.fi.airportapi.dto.UpdateDestinationLocationDTO;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,7 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Michal Zbranek
  */
 @Import({FacadeTestConfiguration.class})
-@RequestMapping("destination")
+@RequestMapping("/destination")
 @Controller
 public class DestinationController {
     
@@ -83,6 +85,48 @@ public class DestinationController {
             model.addAttribute("alert_danger", "Destination was not created because of some unexpected error");
             redirectAttributes.addFlashAttribute("alert_danger", "Destination was not created because it already exists.");
         }
+        return "redirect:" + uriBuilder.path("/destination").toUriString();
+    }
+    
+    /**
+     * Prepares edit form.
+     *
+     * @param id, model
+     * @return JSP page name
+     */
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String editDestination(@PathVariable("id") long id, Model model) {
+        model.addAttribute("destination", destinationFacade.getDestinationWithId(id));
+        return "destination/edit";
+    }
+    
+    /**
+     * Updates destination
+     *
+     * @param id, modelAttribute, bindingResult, model, redirectAttributes, uriBuilder
+     * @return JSP page
+     */
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String updateDestination(@PathVariable("id") long id, @Valid @ModelAttribute("destination") DestinationDTO updatedDestination, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
+         
+        if ((updatedDestination.getLocation()).equals("")){
+            redirectAttributes.addFlashAttribute("alert_info", "Location of destination is empty");
+            return "redirect:" + uriBuilder.path("/destination/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+        
+        if (destinationFacade.getAllDestinations().contains(updatedDestination)){
+            redirectAttributes.addFlashAttribute("alert_info", "Location of destination already exists");
+            return "redirect:" + uriBuilder.path("/destination/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+        
+        DestinationDTO destination = destinationFacade.getDestinationWithId(id);
+        UpdateDestinationLocationDTO destination2 = new UpdateDestinationLocationDTO();
+        destination2.setId(destination.getId());
+        destination2.setLocation(updatedDestination.getLocation());
+        destinationFacade.updateDestinationLocation(destination2);
+
+        redirectAttributes.addFlashAttribute("alert_success", "Destination " + id + " was updated");
         return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
     
