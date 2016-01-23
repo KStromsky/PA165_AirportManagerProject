@@ -51,7 +51,7 @@
                         </ul>
                     <c:if test="${empty authenticated}">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="${pageContext.request.requestURI.contains("/steward/new") ? 'active' :''}"><a href="${pageContext.request.contextPath}/steward/new">Sign in</a></li>                       
+                            <li class="${pageContext.request.requestURI.contains("/steward/new") ? 'active' :''}"><a href="${pageContext.request.contextPath}/steward/new">Sign up</a></li>                       
                         </ul>
                     </c:if>
                     <c:if test="${not empty authenticated}">
