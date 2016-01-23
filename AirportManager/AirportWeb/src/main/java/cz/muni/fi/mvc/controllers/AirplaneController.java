@@ -6,6 +6,7 @@ import cz.muni.fi.airportapi.dto.AirplaneDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
+import cz.muni.fi.airportapi.dto.UpdateAirplaneCapacityDTO;
 import cz.muni.fi.airportapi.facade.AirplaneFacade;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
@@ -181,6 +182,32 @@ public class AirplaneController {
             return "redirect:" + uriBuilder.path("/airplane").toUriString();
         }
         return "airplane/detail";
+    }
+    
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String editAirplane(@PathVariable("id") long id, Model model) {
+        model.addAttribute("airplane", airplaneFacade.getAirplaneWithId(id));
+        return "airplane/edit";
+    }
+    
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String updateAirplane(@PathVariable("id") long id, @Valid @ModelAttribute("airplane") AirplaneDTO updatedAirplane, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
+         
+        if (updatedAirplane.getCapacity()==0){
+            redirectAttributes.addFlashAttribute("alert_danger", "Capacity of airplane is empty");
+            return "redirect:" + uriBuilder.path("/airplane/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+        
+        
+        AirplaneDTO airplane = airplaneFacade.getAirplaneWithId(id);
+        UpdateAirplaneCapacityDTO airplane2 = new UpdateAirplaneCapacityDTO();
+        airplane2.setAirplaneId(airplane.getId());
+        airplane2.setCapacity(updatedAirplane.getCapacity());
+        airplaneFacade.updateAirplaneCapacity(airplane2);
+
+        redirectAttributes.addFlashAttribute("alert_success", "Airplane " + id + " was updated");
+        return "redirect:" + uriBuilder.path("/airplane").toUriString();
     }
     
      /**

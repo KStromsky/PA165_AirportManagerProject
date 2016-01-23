@@ -85,6 +85,9 @@
                                 <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary">Delete</button>
                             </form>
                         </td>
+                        <td class="col-md-1">
+                        <a href="${pageContext.request.contextPath}/airplane/edit/${airplane.id}" class="btn btn-primary">Edit</a>
+                    </td>
                     </tr>
                 </c:forEach>
             </tbody>
