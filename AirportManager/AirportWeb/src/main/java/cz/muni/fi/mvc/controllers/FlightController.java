@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -118,12 +121,17 @@ public class FlightController {
      * @param model display data
      * @return jsp page
      */
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String delete(@PathVariable long id, Model model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/delete/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    public String delete(@PathVariable long id, Model model, HttpServletRequest  request,
+            UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) {
         FlightDTO flight = flightFacade.getFlightWithId(id);
         flightFacade.removeFlight(id);
         redirectAttributes.addFlashAttribute("alert_info", "Flight with id: " + flight.getId() + " was deleted.");
-        return "redirect:" + uriBuilder.path("/flight").toUriString();
+        UriComponentsBuilder build =  uriBuilder.path("/flight");
+        for ( Entry<String,String[]> pair : request.getParameterMap().entrySet()) {
+            build.queryParam(pair.getKey(), pair.getValue());
+        }     
+        return "redirect:" + build.toUriString();
     }
     
     /**

@@ -61,8 +61,9 @@ public interface StewardService {
     /**
      * Updates Steward
      * @param update Update with new name
+     * @param password not hashed pw
      */
-    public void updateSteward(Steward update);
+    public void updateSteward(Steward update, String password);
     
     /**
      * Finds stewards, that are not assigned to a flight during given period

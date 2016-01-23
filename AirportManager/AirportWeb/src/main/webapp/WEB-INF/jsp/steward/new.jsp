@@ -38,14 +38,14 @@
                     <form:errors path="username" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group ${password_error?'has-error':''}">
                 <form:label path="password" cssClass="col-sm-1 control-label">Password</form:label>
                     <div class="col-sm-4">
                     <form:input type="password" path="password" cssClass="form-control"/>
                     <form:errors path="password" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group ">
                 <form:label path="gender" cssClass="col-sm-1 control-label">Gender</form:label>
                     <div class="col-sm-4">
                     <form:select path="gender" cssClass="form-control">

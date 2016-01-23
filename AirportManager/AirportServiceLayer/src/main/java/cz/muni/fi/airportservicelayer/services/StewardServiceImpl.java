@@ -134,9 +134,13 @@ public class StewardServiceImpl implements StewardService {
     }
 
     @Override
-    public void updateSteward(Steward update) {
+    public void updateSteward(Steward update, String password) {
         if (update == null ||update.getId() == null) {
             return;
+        }
+        
+        if (password != null) {
+            update.setPwHash(createHash(password));
         }
         try {
             stewardDao.update(update);

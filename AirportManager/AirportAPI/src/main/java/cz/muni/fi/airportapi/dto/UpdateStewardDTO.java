@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
  *
  * @author Sebastian Kupka
  */
-public class UpdateStewardNameDTO {
+public class UpdateStewardDTO {
     private Long id;
     @NotNull
     @Size(min=1, max=50)
@@ -24,6 +24,9 @@ public class UpdateStewardNameDTO {
     @NotNull
     @Size(min=1, max=50) 
     private String surname;
+    
+    @Size(min=5, max=20) 
+    private String password;
     
     /**
      * Gets the entity Database ID
@@ -73,6 +76,14 @@ public class UpdateStewardNameDTO {
         this.surname = surname;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -85,10 +96,10 @@ public class UpdateStewardNameDTO {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof UpdateStewardNameDTO)) {
+        if (!(obj instanceof UpdateStewardDTO)) {
             return false;
         }
-        final UpdateStewardNameDTO other = (UpdateStewardNameDTO) obj;
+        final UpdateStewardDTO other = (UpdateStewardDTO) obj;
         if (!Objects.equals(this.getId(), other.getId())) {
             return false;
         }
@@ -101,6 +112,7 @@ public class UpdateStewardNameDTO {
                 "id=" + id + 
                 ", firstname=" + firstname + 
                 ", surname=" + surname + 
+                ", password=" + password + 
                 '}';
     }
 }

@@ -16,8 +16,8 @@
                 </a>
             </div>
             <div class="col-md-12">
-                    <label> </label>
-                </div>
+                <label> </label>
+            </div>
             <form action="${pageContext.request.contextPath}/steward">
 
                 <div class="col-md-2">
@@ -37,7 +37,7 @@
                         </c:forEach>
                     </select>
                 </div>
-                
+
                 <div class="col-md-4">
                     <label class="col-md-12">&nbsp; </label>
                     <div class="col-md-2">
@@ -71,6 +71,9 @@
                         <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
                         <td class="col-md-1">
                             <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
+                        </td>
+                        <td class="col-md-1">
+                            <a href="${pageContext.request.contextPath}/steward/edit/${steward.id}" class="btn btn-primary btn-block">Edit</a>
                         </td>
                         <td class="col-md-1">
                             <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">

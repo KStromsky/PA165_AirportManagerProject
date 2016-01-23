@@ -444,13 +444,13 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
     @Test(expectedExceptions = BasicDataAccessException.class)
     public void testThrowBasicDataAccesException() {
         when(stewardDao.update(s1)).thenThrow(new PersistenceException());
-        stewardService.updateSteward(s1);
+        stewardService.updateSteward(s1, null);
     } 
     
     @Test(expectedExceptions = IllegalArgumentDataException.class)
     public void testThrowInvallidArgumentDataException() {
         when(stewardDao.update(s2)).thenThrow(new IllegalArgumentException());
-        stewardService.updateSteward(s2);
+        stewardService.updateSteward(s2, null);
     }
     
     @Test(expectedExceptions = ValidationDataException.class)

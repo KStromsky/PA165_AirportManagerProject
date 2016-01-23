@@ -1,17 +1,13 @@
 package cz.muni.fi.mvc.security;
 
-import cz.muni.fi.airportapi.dto.UserAuthenticateDTO;
-import cz.muni.fi.airportapi.dto.UserDTO;
-import cz.muni.fi.airportapi.facade.UserFacade;
+import cz.muni.fi.airportapi.dto.StewardDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 
 /**
@@ -19,7 +15,8 @@ import java.io.IOException;
  *
  * @author Jakub Stromský
  */
-@WebFilter(urlPatterns = {"/", "/steward/list", "/steward", "/steward/detail", "/steward/detail/*", "/flight/*", "/destination/*", "/airplane/*"})
+@WebFilter(urlPatterns = {"/", "/steward/list", "/steward", "/steward/detail", "/steward/detail/*", 
+    "/steward/edit/*", "/steward/update/*", "/flight/*", "/destination/*", "/airplane/*"})
 public class ProtectFilter implements Filter {
 
     final static Logger log = LoggerFactory.getLogger(ProtectFilter.class);
@@ -31,16 +28,24 @@ public class ProtectFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) s;
 
         Object auth = request.getSession().getAttribute("authenticated");
-        if (auth != null) {
-            chain.doFilter(request, response);
-            return;
+        if (auth != null && auth instanceof StewardDTO) {
+            StewardDTO steward = (StewardDTO) auth;
+            if (!steward.isIsAdmin() 
+                    && request.getRequestURL().toString().matches(".*new.*|.*create.*|.*update.*|.*edit.*")
+                    && !request.getRequestURL().toString().matches(".*/steward/.*/" + steward.getId().toString())) {
+                log.warn("requires admin to access");
+            } else {
+                chain.doFilter(request, response);
+                return;
+            }
+        } else {
+            log.warn("authentication fail");
         }
-        log.warn("authentication fail");
         response401(response, request);
     }
 
     private void response401(HttpServletResponse response, HttpServletRequest request) throws IOException {
-        response.sendRedirect(request.getContextPath()+"/login");
+        response.sendRedirect(request.getContextPath()+"/login?access=False");
     }
 
     @Override

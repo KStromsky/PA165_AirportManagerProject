@@ -20,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StewardCreationalDTO {
     
     @NotNull
-    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}", message = "Valid personal info has to be filled in. \n Example: A1C-123456")
+    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}", message = "Valid personal info has to be filled in. \n Example: A1C-12345")
     private String personalIdentificator;
     @NotNull
     @Size(min=1, max=50)
@@ -38,6 +38,7 @@ public class StewardCreationalDTO {
     private Date employmentDate;
     
     @NotNull
+    @Size(min=1, max=50) 
     private String username;
     
     @NotNull

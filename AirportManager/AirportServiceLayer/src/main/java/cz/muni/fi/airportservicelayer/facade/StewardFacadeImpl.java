@@ -10,7 +10,7 @@ import cz.muni.fi.airportapi.dto.FlightDTO;
 import cz.muni.fi.airportapi.dto.StewardAuthDTO;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
-import cz.muni.fi.airportapi.dto.UpdateStewardNameDTO;
+import cz.muni.fi.airportapi.dto.UpdateStewardDTO;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.services.BeanMappingService;
 import cz.muni.fi.airportservicelayer.services.StewardService;
@@ -41,6 +41,15 @@ public class StewardFacadeImpl implements StewardFacade {
             return null;
         }
         return beanMappingservice.mapTo(steward, StewardDTO.class);
+    }
+    
+    @Override
+    public UpdateStewardDTO getUpdateStewardWithId(Long id) {
+         Steward steward = stewardService.findById(id);
+        if (steward == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(steward, UpdateStewardDTO.class);
     }
 
     @Override
@@ -82,11 +91,11 @@ public class StewardFacadeImpl implements StewardFacade {
     }
 
     @Override
-    public void updateStewardName(UpdateStewardNameDTO update) {
+    public void updateStewardName(UpdateStewardDTO update) {
         Steward oldSteward = stewardService.findById(update.getId());
         oldSteward.setFirstname(update.getFirstname());
         oldSteward.setSurname(update.getSurname());
-        stewardService.updateSteward(oldSteward);
+        stewardService.updateSteward(oldSteward, update.getPassword());
     }
 
     @Override

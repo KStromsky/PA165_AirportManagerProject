@@ -8,7 +8,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:set var="title" value="${\"Airport\"}"/>
+<c:set var="title" value="Airport"/>
 
 <%-- call my own tag defined in /WEB-INF/tags/pagetemplate.tag, provide title attribute --%>
 <my:pagetemplate title="Airport Manager">

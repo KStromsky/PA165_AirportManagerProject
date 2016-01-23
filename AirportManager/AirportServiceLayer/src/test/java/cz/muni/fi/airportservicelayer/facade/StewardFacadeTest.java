@@ -155,7 +155,7 @@ public class StewardFacadeTest extends AbstractTransactionalTestNGSpringContextT
     public void testUpdateStewardName() {
         Long id = stewardFacade.createSteward(s1);
         
-        UpdateStewardNameDTO update = new UpdateStewardNameDTO();
+        UpdateStewardDTO update = new UpdateStewardDTO();
         update.setFirstname(s1.getFirstname() + " New");
         update.setSurname(s1.getSurname()+ " New");
         update.setId(id);

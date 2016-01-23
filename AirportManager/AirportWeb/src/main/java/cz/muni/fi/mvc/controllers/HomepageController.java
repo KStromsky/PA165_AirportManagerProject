@@ -26,6 +26,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -45,25 +46,28 @@ public class HomepageController {
 //        return "home";
 //    }
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public String displayLogin(Model model, HttpServletRequest request) {
+    public String displayLogin(Model model, HttpServletRequest request, UriComponentsBuilder uriBuilder) {
 
-        HttpSession session = request.getSession(true);
-        String user = (String) session.getAttribute("user");
-
-        if (user == null) {
-            UserAuthenticateDTO userAuth = new UserAuthenticateDTO();
-            model.addAttribute("valid", false);
-            model.addAttribute("userAuth", userAuth);
+        if ( request.getSession().getAttribute("authenticated") != null) {
+            return "home";
         } else {
-            model.addAttribute("valid", true);
-            model.addAttribute("user", user);
+            return "redirect:" + uriBuilder.path("/login").toUriString();
         }
-        return "home";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String logingGet(Model model
-    ) {
+    public String logingGet(@RequestParam(value = "access", required = false, defaultValue = "True") boolean access,
+            Model model, HttpServletRequest request, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) 
+    {
+        if ( request.getSession().getAttribute("authenticated") != null) {
+            if (!access) {
+                redirectAttributes.addFlashAttribute("alert_danger", "You cannot access given page. Administator rights are required.");
+            }
+            return "redirect:" + uriBuilder.path("/").toUriString();
+        }
+        if (!access) {
+            model.addAttribute("alert_danger", "Login required to access given page.");
+        }
         model.addAttribute("authSteward", new StewardAuthDTO());
         return "login";
     }
@@ -78,11 +82,11 @@ public class HomepageController {
             return "login";
         }
         if (!stewardFacade.authentication(formBean)) {
-            model.addAttribute("alert_warning", "authentication failed");
-            return "login";
+            redirectAttributes.addFlashAttribute("alert_danger", "authentication for \"" + formBean.getUsername() +"\" failed");
+            return "redirect:" + uriBuilder.path("/login").toUriString();
         }
         
-        redirectAttributes.addFlashAttribute("alert_success", "Succesfully loged in");
+        redirectAttributes.addFlashAttribute("alert_info", "Succesfully loged in");
         request.getSession().setAttribute("authenticated", stewardFacade.getStewardWithUsername(formBean.getUsername()));
         return "redirect:/";
     }
@@ -91,7 +95,7 @@ public class HomepageController {
     public String logout(Model model, HttpServletRequest request
     ) {
         request.getSession().removeAttribute("authenticated");
-        model.addAttribute("alert_success", "loged out");
+        model.addAttribute("alert_info", "loged out");
         model.addAttribute("authSteward", new StewardAuthDTO());
         return "/login";
     }
