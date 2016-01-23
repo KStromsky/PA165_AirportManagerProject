@@ -57,6 +57,7 @@
                     <th>PersonalIdentificator</th>
                     <th>First Name</th>
                     <th>Surname</th>
+                    <th>Username</th>
                     <th>Flights Count</th>
                 </tr>
             </thead>
@@ -66,6 +67,7 @@
                         <td class="col-md-2"><c:out value="${steward.personalIdentificator}"/></td>
                         <td class="col-md-2"><c:out value="${steward.firstname}"/></td>
                         <td class="col-md-2"><c:out value="${steward.surname}"/></td>
+                        <td class="col-md-2"><c:out value="${steward.username}"/></td>
                         <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
                         <td class="col-md-1">
                             <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>

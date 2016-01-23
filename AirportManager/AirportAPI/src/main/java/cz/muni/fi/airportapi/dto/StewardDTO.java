@@ -22,6 +22,8 @@ public class StewardDTO {
     private Gender gender;
     private Date dateOfBirth;
     private Date employmentDate;
+    private String username;
+    private boolean isAdmin;
 
     /**
      * Gets the entity Database ID
@@ -135,6 +137,22 @@ public class StewardDTO {
         this.employmentDate = employmentDate;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -159,14 +177,16 @@ public class StewardDTO {
 
     @Override
     public String toString() {
-        return "StewardDTO{" + 
-                "id=" + id + 
-                ", personalIdentificator=" + personalIdentificator + 
-                ", firstname=" + firstname + 
-                ", surname=" + surname + 
-                ", gender=" + gender + 
-                ", dateOfBirth=" + dateOfBirth + 
-                ", employmentDate=" + employmentDate + 
-                '}';
-    }  
+        return "StewardDTO{" + "id=" + id 
+                + ", personalIdentificator=" + personalIdentificator 
+                + ", firstname=" + firstname 
+                + ", surname=" + surname 
+                + ", gender=" + gender 
+                + ", dateOfBirth=" + dateOfBirth 
+                + ", employmentDate=" + employmentDate 
+                + ", username=" + username 
+                + ", isAdmin=" + isAdmin + '}';
+    }
+
+    
 }

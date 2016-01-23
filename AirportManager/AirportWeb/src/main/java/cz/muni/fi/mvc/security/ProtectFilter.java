@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * @author Jakub Stromský
  */
-@WebFilter(urlPatterns = {"/steward/*", "/flight/*", "/destination/*", "/airplane/*"})
+@WebFilter(urlPatterns = {"/", "/steward/list", "/steward", "/steward/detail", "/steward/detail/*", "/flight/*", "/destination/*", "/airplane/*"})
 public class ProtectFilter implements Filter {
 
     final static Logger log = LoggerFactory.getLogger(ProtectFilter.class);
@@ -30,49 +30,17 @@ public class ProtectFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) r;
         HttpServletResponse response = (HttpServletResponse) s;
 
-        String auth = request.getHeader("Authorization");
-        if (auth == null) {
-            response401(response);
+        Object auth = request.getSession().getAttribute("authenticated");
+        if (auth != null) {
+            chain.doFilter(request, response);
             return;
         }
-        String[] creds = parseAuthHeader(auth);
-        String logname = creds[0];
-        String password = creds[1];
-
-        //get Spring context and UserFacade from it
-        UserFacade userFacade = WebApplicationContextUtils.getWebApplicationContext(r.getServletContext()).getBean(UserFacade.class);
-        UserDTO matchingUser = userFacade.findUserByUserName(logname);
-        if(matchingUser==null) {
-            log.warn("no user with user name {}", logname);
-            response401(response);
-            return;
-        }
-        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO();
-        userAuthenticateDTO.setUserId(matchingUser.getId());
-        userAuthenticateDTO.setPassword(password);
-        if (!userFacade.isAdmin(matchingUser)) {
-            log.warn("user not admin {}", matchingUser);
-            response401(response);
-            return;
-        }
-        if (!userFacade.authenticate(userAuthenticateDTO)) {
-            log.warn("wrong credentials: user={} password={}", creds[0], creds[1]);
-            response401(response);
-            return;
-        }
-        request.setAttribute("authenticatedUser", matchingUser);
-        chain.doFilter(request, response);
+        log.warn("authentication fail");
+        response401(response, request);
     }
 
-
-    private String[] parseAuthHeader(String auth) {
-        return new String(DatatypeConverter.parseBase64Binary(auth.split(" ")[1])).split(":", 2);
-    }
-
-    private void response401(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setHeader("WWW-Authenticate", "Basic realm=\"type userName and password\"");
-        response.getWriter().println("<html><body><h1>401 Unauthorized</h1> Go away ...</body></html>");
+    private void response401(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.sendRedirect(request.getContextPath()+"/login");
     }
 
     @Override

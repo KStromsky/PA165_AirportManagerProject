@@ -36,6 +36,14 @@ public class StewardCreationalDTO {
     @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date employmentDate;
+    
+    @NotNull
+    private String username;
+    
+    @NotNull
+    @Size(min = 5, max = 20)
+    private String password;
+    
 
     /**
      * Gets the personal identificator of steward
@@ -133,6 +141,22 @@ public class StewardCreationalDTO {
         this.employmentDate = employmentDate;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -157,13 +181,14 @@ public class StewardCreationalDTO {
 
     @Override
     public String toString() {
-        return "StewardCreationalDTO{" + 
-                "personalIdentificator=" + personalIdentificator + 
-                ", firstname=" + firstname + 
-                ", surname=" + surname + 
-                ", gender=" + gender + 
-                ", dateOfBirth=" + dateOfBirth + 
-                ", employmentDate=" + employmentDate + 
-                '}';
+        return "StewardCreationalDTO{" + "personalIdentificator=" + personalIdentificator 
+                + ", firstname=" + firstname 
+                + ", surname=" + surname 
+                + ", gender=" + gender 
+                + ", dateOfBirth=" + dateOfBirth 
+                + ", employmentDate=" + employmentDate 
+                + ", username=" + username + '}';
     }
+
+    
 }

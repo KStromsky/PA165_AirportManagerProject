@@ -72,6 +72,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         s2 = new Steward();
@@ -88,6 +89,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s2.setFirstname("Peter");
         s2.setSurname("Malick");
         s2.setGender(Gender.MALE);
+        s2.setUsername("bbb");
         s2.setPersonalIdentificator("123-23456");
         
     }
@@ -116,6 +118,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         stewardDao.create(s1);
         Assert.notNull(stewardDao.findById(s1.getId()));
@@ -142,6 +145,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -167,6 +171,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -190,6 +195,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("aaa");
         s1.setPersonalIdentificator("123-12345");
         
                 
@@ -207,6 +213,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s2.setFirstname("Emma");
         s2.setSurname("Stevenson");
         s2.setGender(Gender.MALE);
+        s2.setUsername("bbb");
         s2.setPersonalIdentificator("123-23456");
         
         Steward s3 = new Steward();
@@ -223,6 +230,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s3.setFirstname("Stevenson");
         s3.setSurname("Stevenson");
         s3.setGender(Gender.MALE);
+        s3.setUsername("ccc");
         s3.setPersonalIdentificator("123-23457");
         
         Steward s4 = new Steward();
@@ -239,6 +247,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s4.setFirstname("Emma");
         s4.setSurname("Emma");
         s4.setGender(Gender.FEMALE);
+        s4.setUsername("ddd");
         s4.setPersonalIdentificator("123-23458");
         
         stewardDao.create(s1);
@@ -270,6 +279,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("aaa");
         s1.setPersonalIdentificator("123-12345");
         
                 
@@ -287,6 +297,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s2.setFirstname("Joey");
         s2.setSurname("Johnson");
         s2.setGender(Gender.MALE);
+        s2.setUsername("bbb");
         s2.setPersonalIdentificator("123-23456");
         
         stewardDao.create(s1);
@@ -316,6 +327,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setEmploymentDate(employment);
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
+        s1.setUsername("bbb");
         s1.setGender(Gender.FEMALE);
         stewardDao.create(s1);
 
@@ -338,7 +350,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
-        
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("Invalid");
         
         stewardDao.create(s1);
@@ -361,6 +373,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setEmploymentDate(employment);
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         stewardDao.create(s1);
     }
@@ -381,6 +394,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setEmploymentDate(employment);
         s1.setFirstname("Emma");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -402,6 +416,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setEmploymentDate(employment);
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -423,6 +438,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -444,6 +460,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("bbb");
         s1.setPersonalIdentificator("123-12345");
         
         stewardDao.create(s1);
@@ -482,6 +499,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("bbb");
         s1.setGender(Gender.MALE);
 
         Steward s2 = new Steward();
@@ -490,6 +508,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s2.setPersonalIdentificator("111-11112");
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
+        s2.setUsername("ccc");
         s2.setGender(Gender.MALE);
 
         Steward awaibleS1 = new Steward();
@@ -498,6 +517,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         awaibleS1.setPersonalIdentificator("111-11113");
         awaibleS1.setDateOfBirth(formatter.parse("1988/02/02"));
         awaibleS1.setEmploymentDate(formatter.parse("2014/03/01"));
+        awaibleS1.setUsername("aaa");
         awaibleS1.setGender(Gender.FEMALE);
 
         Steward awaibleS2 = new Steward();
@@ -506,6 +526,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         awaibleS2.setPersonalIdentificator("111-11114");
         awaibleS2.setDateOfBirth(formatter.parse("1988/02/02"));
         awaibleS2.setEmploymentDate(formatter.parse("2014/03/01"));
+        awaibleS2.setUsername("asa");
         awaibleS2.setGender(Gender.FEMALE);
 
         stewardDao.create(s1);
@@ -590,6 +611,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("bbb");
         s1.setGender(Gender.MALE);
 
         Steward s2 = new Steward();
@@ -598,6 +620,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         s2.setPersonalIdentificator("111-11112");
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
+        s2.setUsername("aaa");
         s2.setGender(Gender.MALE);
 
         Steward awaibleS1 = new Steward();
@@ -606,6 +629,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         awaibleS1.setPersonalIdentificator("111-11113");
         awaibleS1.setDateOfBirth(formatter.parse("1988/02/02"));
         awaibleS1.setEmploymentDate(formatter.parse("2014/03/01"));
+        awaibleS1.setUsername("asda");
         awaibleS1.setGender(Gender.FEMALE);
 
         Steward awaibleS2 = new Steward();
@@ -614,6 +638,7 @@ public class StewardDaoTest extends AbstractTestNGSpringContextTests {
         awaibleS2.setPersonalIdentificator("111-11114");
         awaibleS2.setDateOfBirth(formatter.parse("1988/02/02"));
         awaibleS2.setEmploymentDate(formatter.parse("2014/03/01"));
+        awaibleS2.setUsername("asdasaasa");
         awaibleS2.setGender(Gender.FEMALE);
 
         stewardDao.create(s1);

@@ -84,6 +84,7 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
         s1.setPersonalIdentificator("123-12345");
+        s1.setUsername("emaste");
         s1.setId(1l);
         
         s2 = new Steward();
@@ -101,6 +102,7 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
         s2.setSurname("Malick");
         s2.setGender(Gender.MALE);
         s2.setPersonalIdentificator("123-23456");
+        s2.setUsername("petmal");
         s2.setId(2l);
         
         List<Steward> stewards = new ArrayList<Steward>();
@@ -129,13 +131,13 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
     
     @Test
     public void testCreate() {
-        Assert.isNull(stewardService.createSteward(null));
-        Assert.notNull(stewardService.createSteward(s1));
+        Assert.isNull(stewardService.createSteward(null, null));
+        Assert.notNull(stewardService.createSteward(s1, "pw"));
     }
 
     @Test
     public void testFindById() {
-        Steward steward= stewardService.findById(stewardService.createSteward(s1));
+        Steward steward= stewardService.findById(stewardService.createSteward(s1, "pw"));
         Assert.notNull(steward);
         assert steward.getPersonalIdentificator().equals(s1.getPersonalIdentificator());
         Assert.isNull(stewardService.findById(null));
@@ -143,7 +145,7 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
 
     @Test
     public void testFindByPersonalIdentificator() {
-        Steward steward = stewardService.findById(stewardService.createSteward(s1));
+        Steward steward = stewardService.findById(stewardService.createSteward(s1, "pw"));
         Steward result = stewardService.findByPersonalIdentificator(s1.getPersonalIdentificator());
         assertEquals(steward, result);
         Assert.isNull(stewardService.findByPersonalIdentificator(null));
@@ -152,21 +154,21 @@ public class StewardServiceTest extends AbstractTransactionalTestNGSpringContext
     @Test
     public void testGetAllStewards() {
         List<Steward> expResult = new ArrayList<>();
-        expResult.add(stewardService.findById(stewardService.createSteward(s1)));
-        expResult.add(stewardService.findById(stewardService.createSteward(s2)));
+        expResult.add(stewardService.findById(stewardService.createSteward(s1, "pw")));
+        expResult.add(stewardService.findById(stewardService.createSteward(s2, "pw")));
         List<Steward> result = stewardService.findAllStewards();
         assertEquals(expResult, result);
     }
 
     @Test
     public void testFindByName() {
-        Steward steward = stewardService.findById(stewardService.createSteward(s1));
+        Steward steward = stewardService.findById(stewardService.createSteward(s1, "pw"));
         List<Steward> result = stewardService.findByName(steward.getFirstname(), steward.getSurname());
         assert result.size() == 1;
         assert result.get(0).getFirstname().equals(steward.getFirstname());
         assert result.get(0).getSurname().equals(steward.getSurname());
         
-        steward = stewardService.findById(stewardService.createSteward(s2));
+        steward = stewardService.findById(stewardService.createSteward(s2, "pw"));
         result = stewardService.findByName(steward.getFirstname(), steward.getSurname());
         assert result.size() == 1;
         assert result.get(0).getFirstname().equals(steward.getFirstname());

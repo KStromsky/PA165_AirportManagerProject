@@ -21,6 +21,18 @@
                     <td class="col-md-2"><b>Surname</b></td>
                     <td>${steward.surname}</td>
                 </tr>
+                <c:if test="${steward.isAdmin}">
+                    <tr>
+                        <td class="col-md-2"><b>Role</b></td>
+                        <td>Administrator</td>
+                    </tr>    
+                </c:if>
+                <c:if test="${steward.isAdmin == false}">
+                    <tr>
+                        <td class="col-md-2"><b>Role</b></td>
+                        <td>User</td>
+                    </tr>    
+                </c:if>
                 <tr>
                     <td class="col-md-2"><b>Personal ID</b></td>
                     <td>${steward.personalIdentificator}</td>
