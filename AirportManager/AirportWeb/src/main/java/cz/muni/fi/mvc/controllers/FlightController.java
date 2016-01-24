@@ -76,9 +76,9 @@ public class FlightController {
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-        if (binder.getTarget() instanceof FlightCreationalDTO) {
+        /*if (binder.getTarget() instanceof FlightCreationalDTO) {
             binder.addValidators(new FlightCreationalDTOValidator(flightFacade));
-        }
+        }*/
         
         if (binder.getTarget() instanceof UpdateFlightDTO) {
             binder.addValidators(new FlightUpdateDTOValidator(flightFacade));
