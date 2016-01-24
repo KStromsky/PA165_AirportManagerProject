@@ -15,6 +15,7 @@ import cz.muni.fi.airportapi.dto.FlightDTO;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
@@ -232,7 +233,7 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     @Test
     public void testUpdateFlightArrival() {
         Long id = flightFacade.createFlight(flightCreationalDTO1);
-        UpdateFlightArrivalDTO update = new UpdateFlightArrivalDTO();
+        UpdateFlightDTO update = new UpdateFlightDTO();
         update.setId(id);
         update.setArrival(date3);
         flightFacade.updateFlightArrival(update);
@@ -242,7 +243,7 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     @Test
     public void testUpdateFlightDeparture() {
         Long id = flightFacade.createFlight(flightCreationalDTO1);
-        UpdateFlightDepartureDTO update = new UpdateFlightDepartureDTO();
+        UpdateFlightDTO update = new UpdateFlightDTO();
         update.setId(id);
         update.setDeparture(date3);
         flightFacade.updateFlightDeparture(update);
@@ -252,9 +253,9 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     @Test
     public void testUpdateFlightDestination() {
         Long id = flightFacade.createFlight(flightCreationalDTO1);
-        UpdateFlightDestinationDTO update = new UpdateFlightDestinationDTO();
+        UpdateFlightDTO update = new UpdateFlightDTO();
         update.setId(id);
-        update.setDestination(dest1);
+        update.setDestinationId(dest1.getId());
         flightFacade.updateFlightDestination(update);
         assert dest1.equals(flightFacade.getFlightWithId(id).getDestination());
     }
@@ -262,9 +263,9 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     @Test
     public void testUpdateFlightOrigin() {
         Long id = flightFacade.createFlight(flightCreationalDTO1);
-        UpdateFlightOriginDTO update = new UpdateFlightOriginDTO();
+        UpdateFlightDTO update = new UpdateFlightDTO();
         update.setId(id);
-        update.setOrigin(dest2);
+        update.setOriginId(dest2.getId());
         flightFacade.updateFlightOrigin(update);
         assert dest2.equals(flightFacade.getFlightWithId(id).getOrigin());
     }
@@ -272,9 +273,9 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
     @Test
     public void testUpdateFlightAirplane() {
         Long id = flightFacade.createFlight(flightCreationalDTO1);
-        UpdateFlightsAirplaneDTO update = new UpdateFlightsAirplaneDTO();
+        UpdateFlightDTO update = new UpdateFlightDTO();
         update.setId(id);
-        update.setAirplane(air2);
+        update.setAirplaneId(air2.getId());
         flightFacade.updateFlightAirplane(update);
         FlightDTO f = flightFacade.getFlightWithId(id);
         AirplaneDTO a = flightFacade.getFlightWithId(id).getAirplane();
