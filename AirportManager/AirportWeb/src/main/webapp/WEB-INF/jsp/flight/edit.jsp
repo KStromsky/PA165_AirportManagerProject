@@ -23,47 +23,47 @@
                 </div>
             </div>
             <div class="form-group ${origin_error?'has-error':''}">
-                <form:label path="origin" cssClass="col-sm-1 control-label">Origin</form:label>
+                <form:label path="originId" cssClass="col-sm-1 control-label">Origin</form:label>
                 <div class="col-sm-4">
-                    <form:select path="origin" cssClass="form-control">
+                    <form:select path="originId" cssClass="form-control">
                         <c:forEach items="${destinations}" var="d">
                             <form:option value="${d.id}">${d.location}</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors path="origin" cssClass="help-block"/>
+                    <form:errors path="originId" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${destination_error?'has-error':''}">
-                <form:label path="destination" cssClass="col-sm-1 control-label">Destination</form:label>
+                <form:label path="destinationId" cssClass="col-sm-1 control-label">Destination</form:label>
                 <div class="col-sm-4">
-                    <form:select path="destination" cssClass="form-control">
+                    <form:select path="destinationId" cssClass="form-control">
                         <c:forEach items="${destinations}" var="d">
                             <form:option value="${d.id}">${d.location}</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors path="destination" cssClass="help-block"/>
+                    <form:errors path="destinationId" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${airplane_error?'has-error':''}">
-                <form:label path="airplane" cssClass="col-sm-1 control-label">Airplane</form:label>
+                <form:label path="airplaneId" cssClass="col-sm-1 control-label">Airplane</form:label>
                 <div class="col-sm-4">
-                    <form:select path="airplane" cssClass="form-control">
+                    <form:select path="airplaneId" cssClass="form-control">
                         <c:forEach items="${airplanes}" var="a">
                             <form:option value="${a.id}">${a.name}</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors path="airplane" cssClass="help-block"/>
+                    <form:errors path="airplaneId" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${stewards_error?'has-error':''}">
-                <form:label path="stewards" cssClass="col-sm-1 control-label">Stewards</form:label>
+                <form:label path="stewardsIds" cssClass="col-sm-1 control-label">Stewards</form:label>
                 <div class="col-sm-4">
-                    <form:select multiple="true" path="stewards" cssClass="form-control">
+                    <form:select multiple="true" path="stewardsIds" cssClass="form-control">
                         <c:forEach items="${stewards}" var="s">
                             <form:option value="${s.id}">${s.personalIdentificator}</form:option>
                         </c:forEach>
                     </form:select>
-                    <form:errors path="stewards" cssClass="help-block"/>
+                    <form:errors path="stewardsIds" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group col-sm-4">
