@@ -34,23 +34,24 @@ public class FlightUpdateDTOValidator implements Validator {
         try {
             UpdateFlightDTO updatedFlight = (UpdateFlightDTO) target;
             if (updatedFlight.getArrival() == null) {
-                 errors.rejectValue("alert_info", "Arrival of flight is empty");
+                 errors.rejectValue("arrival", "FlightUpdateDTOValidator.invalid.arrival");
             }
             if (updatedFlight.getDeparture() == null) {
-                 errors.rejectValue("alert_info", "Departure of flight is empty");
+                 errors.rejectValue("departure", "FlightUpdateDTOValidator.invalid.departure");
             }
             if (updatedFlight.getDeparture().compareTo(updatedFlight.getArrival()) > 0) {
-                 errors.rejectValue("alert_info", "Departure of flight cannot be after the arrival");
+                 errors.rejectValue("departure", "FlightCreationalDTOValidator.invalid.departure");
             }
 
             if (updatedFlight.getOriginId().equals(updatedFlight.getDestinationId())) {
-                 errors.rejectValue("alert_info", "Origin and destination cannot be the same");
+                 errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
+                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.destination");
             }
             if (updatedFlight.getAirplaneId() == null) {
-                errors.rejectValue("alert_info", "Airplane is empty");
+                errors.rejectValue("airplaineId", "FlightUpdateDTOValidator.invalid.airplan");
             }
             if (updatedFlight.getStewardsIds().isEmpty()) {
-                 errors.rejectValue("alert_info", "Stewards cannot be empty");
+                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
             }
         } catch (Exception e) {
             log.debug(e.getMessage(), e);

@@ -76,9 +76,9 @@ public class FlightController {
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-        /*if (binder.getTarget() instanceof FlightCreationalDTO) {
+        if (binder.getTarget() instanceof FlightCreationalDTO) {
             binder.addValidators(new FlightCreationalDTOValidator(flightFacade));
-        }*/
+        }
         
         if (binder.getTarget() instanceof UpdateFlightDTO) {
             binder.addValidators(new FlightUpdateDTOValidator(flightFacade));
@@ -116,6 +116,9 @@ public class FlightController {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
                 log.trace("ObjectError: {}", ge);
             }
+            model.addAttribute("destinations", destinationFacade.getAllDestinations());
+            model.addAttribute("stewards", stewardFacade.getAllStewards());
+            model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
             return "flight/new";
         }
         Long id = flightFacade.createFlight(formBean);

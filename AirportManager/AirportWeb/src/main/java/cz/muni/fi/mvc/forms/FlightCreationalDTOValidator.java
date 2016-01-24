@@ -35,13 +35,14 @@ public class FlightCreationalDTOValidator implements Validator {
             FlightCreationalDTO flightCreationalDTO = (FlightCreationalDTO) target;
             
             if (flightCreationalDTO.getDeparture().compareTo(flightCreationalDTO.getArrival()) > 0) {
-                 errors.rejectValue("alert_info", "Departure of flight cannot be after the arrival");
+                 errors.rejectValue("arrival", "FlightCreationalDTOValidator.invalid.arrival");
             }
             if (flightCreationalDTO.getOriginId().equals(flightCreationalDTO.getDestinationId())) {
-                 errors.rejectValue("alert_info", "Origin and destination cannot be the same");
+                 errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
+                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.destination");
             }
             if (flightCreationalDTO.getStewardsIds().isEmpty()) {
-                 errors.rejectValue("alert_info", "Stewards cannot be empty");
+                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
             }
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
