@@ -74,4 +74,18 @@ public interface FlightService {
      * @return all flight entities sorted by destination
      */
     public List<Flight> listByDestination(Long id);
+    
+    /**
+     * Verifies, if flight's Airplane is Available at given place at set time period
+     * @param flight flight to be checked
+     * @return true, if plane is available (or null), else false
+     */
+    public boolean verifyAirplane(Flight flight);
+    
+    /**
+     * Verifies, if flight's Stewards are Available at given place at set time period
+     * @param flight flight to be checked
+     * @return true, if stewards are available (or empty), else false
+     */
+    public boolean verifyStewards(Flight flight);
 }

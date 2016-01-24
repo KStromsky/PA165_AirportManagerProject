@@ -127,4 +127,18 @@ public interface FlightFacade {
      */
     public List<FlightDTO> getFlightsByDestination(DestinationDTO destination);
     
+    /**
+     * Verifies, if flight's Airplane is Available at given place at set time period
+     * @param flight flight to be checked
+     * @return true, if plane is available (or null), else false
+     */
+    public boolean verifyAirplane(FlightDTO flight);
+    
+    /**
+     * Verifies, if flight's Stewards are Available at given place at set time period
+     * @param flight flight to be checked
+     * @return true, if stewards are available (or empty), else false
+     */
+    public boolean verifyStewards(FlightDTO flight);
+    
 }
