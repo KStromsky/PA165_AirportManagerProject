@@ -14,6 +14,7 @@ import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightStewardsDTO;
 import java.util.List;
 
 /**
@@ -96,6 +97,13 @@ public interface FlightFacade {
     public void updateFlightAirplane(UpdateFlightsAirplaneDTO update);
     
     /**
+     * Updates Flight
+     * 
+     * @param update Flight with updated stewards
+     */
+    public void updateFlightStewards(UpdateFlightStewardsDTO update);
+    
+    /**
      * Lists Flights by origin location.
      * 
      * @param origin Destination to be sorted by.
@@ -109,5 +117,6 @@ public interface FlightFacade {
      * @param destination Destination to be sorted by.
      * @return list of flights flying to given destination
      */
-    public List<FlightDTO> getFlightsByDestination(DestinationDTO destination);   
+    public List<FlightDTO> getFlightsByDestination(DestinationDTO destination);
+    
 }

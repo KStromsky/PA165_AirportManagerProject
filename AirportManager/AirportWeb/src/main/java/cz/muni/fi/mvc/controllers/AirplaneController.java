@@ -6,6 +6,7 @@ import cz.muni.fi.airportapi.dto.AirplaneDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
+import cz.muni.fi.airportapi.dto.UpdateAirplaneCapacityDTO;
 import cz.muni.fi.airportapi.facade.AirplaneFacade;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
@@ -182,6 +183,44 @@ public class AirplaneController {
         }
         return "airplane/detail";
     }
+    
+    /**
+     * Prepares edit form.
+     *
+     * @param id, model
+     * @return JSP page name
+     */
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String editAirplane(@PathVariable("id") long id, Model model) {
+        model.addAttribute("airplane", airplaneFacade.getAirplaneWithId(id));
+        return "airplane/edit";
+    }
+    
+    /**
+     * Updates destination
+     *
+     * @param id, modelAttribute, bindingResult, model, redirectAttributes, uriBuilder
+     * @return JSP page
+     */
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String updateAirplane(@PathVariable("id") long id, @Valid @ModelAttribute("airplane") AirplaneDTO updatedAirplane, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
+         
+        if (updatedAirplane.getCapacity() < 0 ){
+            redirectAttributes.addFlashAttribute("alert_info", "Capacity cannot be negative.");
+            return "redirect:" + uriBuilder.path("/airplane/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+        
+        AirplaneDTO airplane = airplaneFacade.getAirplaneWithId(id);
+        UpdateAirplaneCapacityDTO updatedA = new UpdateAirplaneCapacityDTO();
+        updatedA.setAirplaneId(airplane.getId());
+        updatedA.setCapacity(airplane.getCapacity());
+        airplaneFacade.updateAirplaneCapacity(updatedA);
+
+        redirectAttributes.addFlashAttribute("alert_success", "Airplane" + id + " was updated");
+        return "redirect:" + uriBuilder.path("/airplane").toUriString();
+    }
+    
     
      /**
      * Shows a list of airplanes which are available at given location at given

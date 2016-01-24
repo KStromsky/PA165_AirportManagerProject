@@ -183,15 +183,15 @@ public class Flight {
      * @return the stewards
      */
     public List<Steward> getStewards() {
-        return Collections.unmodifiableList(stewards);
+        return stewards;
     }
     
     public void addSteward(Steward s) {
-        stewards.add(s);
+        getStewards().add(s);
     }
     
     public void removeSteward(Steward s) {
-        stewards.remove(s);
+        getStewards().remove(s);
     }
 
     /**
@@ -199,5 +199,12 @@ public class Flight {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @param stewards the stewards to set
+     */
+    public void setStewards(List<Steward> stewards) {
+        this.stewards = stewards;
     }
 }

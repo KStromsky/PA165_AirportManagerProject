@@ -40,11 +40,11 @@
 
             <div class="col-md-4">
                 <label class="col-md-12">&nbsp; </label>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <button class="btn btn-primary btn-block" type="submit">Filter</button>
                 </div>
-                <div class="col-md-2">
-                    <a href="${pageContext.request.contextPath}/steward" class="btn btn-danger btn-block">Clear</a>
+                <div class="col-md-4">
+                    <a href="${pageContext.request.contextPath}/flight" class="btn btn-danger btn-block">Clear</a>
                 </div>
             </div>
         </form>
@@ -75,8 +75,11 @@
                     </td>
                     <td class="col-md-1">
                         <form method="post" action="${pageContext.request.contextPath}/flight/delete/${flight.id}">
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary btn-danger">Delete</button>
                         </form>
+                    </td>
+                    <td class="col-md-1">
+                        <a href="${pageContext.request.contextPath}/flight/edit/${flight.id}" class="btn btn-primary">Edit</button>
                     </td>
                 </tr>
             </c:forEach>

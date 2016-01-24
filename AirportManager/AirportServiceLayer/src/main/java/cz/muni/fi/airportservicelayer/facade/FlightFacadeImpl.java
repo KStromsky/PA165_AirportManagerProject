@@ -12,11 +12,13 @@ import cz.muni.fi.airport.entity.Steward;
 import cz.muni.fi.airportapi.dto.DestinationDTO;
 import cz.muni.fi.airportapi.dto.FlightCreationalDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
+import cz.muni.fi.airportapi.dto.StewardDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightsAirplaneDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightStewardsDTO;
 import cz.muni.fi.airportapi.facade.FlightFacade;
 import cz.muni.fi.airportservicelayer.services.AirplaneService;
 import cz.muni.fi.airportservicelayer.services.BeanMappingService;
@@ -124,6 +126,13 @@ public class FlightFacadeImpl implements FlightFacade {
         Flight f = flightService.findById(update.getId());
         Airplane a = airplaneService.findById(update.getAirplane().getId());
         f.setAirplane(a);
+        flightService.update(f);
+    }
+    
+    @Override
+    public void updateFlightStewards(UpdateFlightStewardsDTO update) {
+        Flight f = flightService.findById(update.getId());
+        f.setStewards(beanMappingservice.mapTo(update.getStewards(), Steward.class));
         flightService.update(f);
     }
 
