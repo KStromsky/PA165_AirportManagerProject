@@ -26,13 +26,13 @@
                     <td class="col-md-2"><b>Username</b></td>
                     <td>${steward.username}</td>
                 </tr>
-                <c:if test="${steward.isAdmin}">
+                <c:if test="${steward.admin}">
                     <tr>
                         <td class="col-md-2"><b>Role</b></td>
                         <td>Administrator</td>
                     </tr>    
                 </c:if>
-                <c:if test="${steward.isAdmin == false}">
+                <c:if test="${steward.admin == false}">
                     <tr>
                         <td class="col-md-2"><b>Role</b></td>
                         <td>User</td>

@@ -14,32 +14,13 @@ import java.util.Objects;
  *
  * @author Sebastian Kupka
  */
-public class StewardDTO {
-    private Long id;
+public class StewardDTO extends UserDTO {
     private String personalIdentificator;
     private String firstname;
     private String surname;
     private Gender gender;
     private Date dateOfBirth;
     private Date employmentDate;
-    private String username;
-    private boolean isAdmin;
-
-    /**
-     * Gets the entity Database ID
-     * @return identificator
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the entity Database ID
-     * @param id identificator
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * Gets the personal identificator of steward
@@ -145,12 +126,12 @@ public class StewardDTO {
         this.username = username;
     }
 
-    public boolean isIsAdmin() {
-        return isAdmin;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean isAdmin) {
+        this.admin = isAdmin;
     }
     
     @Override
@@ -185,7 +166,7 @@ public class StewardDTO {
                 + ", dateOfBirth=" + dateOfBirth 
                 + ", employmentDate=" + employmentDate 
                 + ", username=" + username 
-                + ", isAdmin=" + isAdmin + '}';
+                + ", admin=" + admin + '}';
     }
 
     
