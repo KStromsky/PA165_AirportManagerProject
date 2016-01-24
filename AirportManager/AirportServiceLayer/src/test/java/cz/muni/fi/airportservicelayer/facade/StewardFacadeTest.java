@@ -71,6 +71,8 @@ public class StewardFacadeTest extends AbstractTransactionalTestNGSpringContextT
         s1.setFirstname("Emma");
         s1.setSurname("Stevenson");
         s1.setGender(Gender.FEMALE);
+        s1.setUsername("addd");
+        s1.setPassword("pw");
         s1.setPersonalIdentificator("123-12345");
         
         s2 = new StewardCreationalDTO();
@@ -87,6 +89,8 @@ public class StewardFacadeTest extends AbstractTransactionalTestNGSpringContextT
         s2.setFirstname("Peter");
         s2.setSurname("Malick");
         s2.setGender(Gender.MALE);
+        s2.setUsername("ara");
+        s2.setPassword("pw");
         s2.setPersonalIdentificator("123-23456");
     }
 
@@ -151,7 +155,7 @@ public class StewardFacadeTest extends AbstractTransactionalTestNGSpringContextT
     public void testUpdateStewardName() {
         Long id = stewardFacade.createSteward(s1);
         
-        UpdateStewardNameDTO update = new UpdateStewardNameDTO();
+        UpdateStewardDTO update = new UpdateStewardDTO();
         update.setFirstname(s1.getFirstname() + " New");
         update.setSurname(s1.getSurname()+ " New");
         update.setId(id);

@@ -7,7 +7,7 @@
 <my:pagetemplate title="Edit Flight">
     <jsp:attribute name="body">
         <form:form method="post" action="${pageContext.request.contextPath}/flight/update/${flight.id}"
-                   modelAttribute="flightUpdate" cssClass="form-horizontal">
+                   modelAttribute="flight" cssClass="form-horizontal">
             <div class="form-group ${arrival_error?'has-error':''}">
                 <form:label path="arrival" cssClass="col-sm-1 control-label">Arrival</form:label>
                 <div class="col-sm-4">

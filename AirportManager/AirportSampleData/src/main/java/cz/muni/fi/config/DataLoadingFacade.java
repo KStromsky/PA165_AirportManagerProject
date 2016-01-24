@@ -85,9 +85,11 @@ public class DataLoadingFacade {
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("hank");
+        s1.setIsAdmin(true);
         s1.setGender(Gender.MALE);
 
-        stewardService.createSteward(s1);
+        stewardService.createSteward(s1,"heslo");
 
         Steward s2 = new Steward();
         s2.setFirstname("Peter");
@@ -95,9 +97,11 @@ public class DataLoadingFacade {
         s2.setPersonalIdentificator("111-11112");
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
+        s2.setUsername("peter");
+        s2.setIsAdmin(false);
         s2.setGender(Gender.MALE);
 
-        stewardService.createSteward(s2);
+        stewardService.createSteward(s2, "heslo");
 
         Steward s3 = new Steward();
         s3.setFirstname("Joan");
@@ -105,9 +109,11 @@ public class DataLoadingFacade {
         s3.setPersonalIdentificator("111-11113");
         s3.setDateOfBirth(formatter.parse("1988/02/02"));
         s3.setEmploymentDate(formatter.parse("2014/03/01"));
+        s3.setUsername("joan");
+        s3.setIsAdmin(false);
         s3.setGender(Gender.FEMALE);
 
-        stewardService.createSteward(s3);
+        stewardService.createSteward(s3, "heslo");
 
         Flight f1 = new Flight();
         f1.setAirplane(a1);

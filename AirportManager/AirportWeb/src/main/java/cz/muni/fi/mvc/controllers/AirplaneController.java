@@ -190,6 +190,7 @@ public class AirplaneController {
      * @param id, model
      * @return JSP page name
      */
+
     @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
     public String editAirplane(@PathVariable("id") long id, Model model) {
         model.addAttribute("airplane", airplaneFacade.getAirplaneWithId(id));
@@ -205,22 +206,22 @@ public class AirplaneController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String updateAirplane(@PathVariable("id") long id, @Valid @ModelAttribute("airplane") AirplaneDTO updatedAirplane, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
-         
-        if (updatedAirplane.getCapacity() < 0 ){
-            redirectAttributes.addFlashAttribute("alert_info", "Capacity cannot be negative.");
+        
+        if (updatedAirplane.getCapacity()==0){
+            redirectAttributes.addFlashAttribute("alert_danger", "Capacity of airplane is empty");
             return "redirect:" + uriBuilder.path("/airplane/edit/{id}").buildAndExpand(id).encode().toUriString();
         }
         
+        
         AirplaneDTO airplane = airplaneFacade.getAirplaneWithId(id);
-        UpdateAirplaneCapacityDTO updatedA = new UpdateAirplaneCapacityDTO();
-        updatedA.setAirplaneId(airplane.getId());
-        updatedA.setCapacity(airplane.getCapacity());
-        airplaneFacade.updateAirplaneCapacity(updatedA);
+        UpdateAirplaneCapacityDTO airplane2 = new UpdateAirplaneCapacityDTO();
+        airplane2.setAirplaneId(airplane.getId());
+        airplane2.setCapacity(updatedAirplane.getCapacity());
+        airplaneFacade.updateAirplaneCapacity(airplane2);
 
-        redirectAttributes.addFlashAttribute("alert_success", "Airplane" + id + " was updated");
+        redirectAttributes.addFlashAttribute("alert_success", "Airplane " + id + " was updated");
         return "redirect:" + uriBuilder.path("/airplane").toUriString();
     }
-    
     
      /**
      * Shows a list of airplanes which are available at given location at given

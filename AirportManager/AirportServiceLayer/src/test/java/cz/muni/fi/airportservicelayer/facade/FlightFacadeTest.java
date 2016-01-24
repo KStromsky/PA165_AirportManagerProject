@@ -133,6 +133,8 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("bbb");
+        s1.setPassword("pw");
         s1.setGender(Gender.MALE);
 
         s2 = new StewardCreationalDTO();
@@ -141,6 +143,8 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         s2.setPersonalIdentificator("111-11112");
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
+        s2.setUsername("aaaa");
+        s2.setPassword("pw");
         s2.setGender(Gender.MALE);
 
         s3 = new StewardCreationalDTO();
@@ -149,8 +153,13 @@ public class FlightFacadeTest extends AbstractTransactionalTestNGSpringContextTe
         s3.setPersonalIdentificator("111-11113");
         s3.setDateOfBirth(formatter.parse("1988/02/02"));
         s3.setEmploymentDate(formatter.parse("2014/03/01"));
+        s3.setUsername("addd");
+        s3.setPassword("pw");
         s3.setGender(Gender.FEMALE);
         
+        //Long s1id = 0L;
+        //s1id = stewardFacade.createSteward(s1);
+        //System.out.println("ID STEWARDA JE" + s1id);
         stew1 = stewardFacade.getStewardWithId(stewardFacade.createSteward(s1));
         stew2 = stewardFacade.getStewardWithId(stewardFacade.createSteward(s2));
         stew3 = stewardFacade.getStewardWithId(stewardFacade.createSteward(s3));

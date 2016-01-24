@@ -95,4 +95,14 @@ public class StewardDaoImpl implements StewardDao {
                 .getResultList();
         return flights;
     }  
+
+    @Override
+    public Steward findByUsername(String username) {
+        try {
+            return em.createQuery("SELECT s FROM Steward s WHERE s.username = :username", Steward.class)
+                    .setParameter("username", username).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

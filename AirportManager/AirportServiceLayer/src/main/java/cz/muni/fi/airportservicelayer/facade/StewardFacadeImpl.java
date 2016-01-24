@@ -7,9 +7,10 @@ package cz.muni.fi.airportservicelayer.facade;
 
 import cz.muni.fi.airport.entity.Steward;
 import cz.muni.fi.airportapi.dto.FlightDTO;
+import cz.muni.fi.airportapi.dto.StewardAuthDTO;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
-import cz.muni.fi.airportapi.dto.UpdateStewardNameDTO;
+import cz.muni.fi.airportapi.dto.UpdateStewardDTO;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.services.BeanMappingService;
 import cz.muni.fi.airportservicelayer.services.StewardService;
@@ -41,6 +42,15 @@ public class StewardFacadeImpl implements StewardFacade {
         }
         return beanMappingservice.mapTo(steward, StewardDTO.class);
     }
+    
+    @Override
+    public UpdateStewardDTO getUpdateStewardWithId(Long id) {
+         Steward steward = stewardService.findById(id);
+        if (steward == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(steward, UpdateStewardDTO.class);
+    }
 
     @Override
     public StewardDTO getStewardWithPersonalIdentificator(String personalIdentificator) {
@@ -63,8 +73,16 @@ public class StewardFacadeImpl implements StewardFacade {
 
     @Override
     public Long createSteward(StewardCreationalDTO steward) {
-        Steward createSteward = beanMappingservice.mapTo(steward, Steward.class);
-        return stewardService.createSteward(createSteward);
+        Steward createSteward = new Steward();
+        createSteward.setDateOfBirth(steward.getDateOfBirth());
+        createSteward.setEmploymentDate(steward.getEmploymentDate());
+        createSteward.setFirstname(steward.getFirstname());
+        createSteward.setGender(steward.getGender());
+        createSteward.setIsAdmin(false);
+        createSteward.setPersonalIdentificator(steward.getPersonalIdentificator());
+        createSteward.setSurname(steward.getSurname());
+        createSteward.setUsername(steward.getUsername());
+        return stewardService.createSteward(createSteward, steward.getPassword());
     }
 
     @Override
@@ -73,11 +91,11 @@ public class StewardFacadeImpl implements StewardFacade {
     }
 
     @Override
-    public void updateStewardName(UpdateStewardNameDTO update) {
+    public void updateStewardName(UpdateStewardDTO update) {
         Steward oldSteward = stewardService.findById(update.getId());
         oldSteward.setFirstname(update.getFirstname());
         oldSteward.setSurname(update.getSurname());
-        stewardService.updateSteward(oldSteward);
+        stewardService.updateSteward(oldSteward, update.getPassword());
     }
 
     @Override
@@ -93,6 +111,20 @@ public class StewardFacadeImpl implements StewardFacade {
     @Override
     public List<StewardDTO> findSpecificStewards(Date fromDate, Date toDate, Long locationId) {
         return beanMappingservice.mapTo(stewardService.findSpecificStewards(fromDate, toDate, locationId), StewardDTO.class);
+    }
+
+    @Override
+    public StewardDTO getStewardWithUsername(String username) {
+        Steward steward = stewardService.findByUsername(username);
+        if(steward == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(steward, StewardDTO.class);
+    }
+
+    @Override
+    public boolean authentication(StewardAuthDTO authDTO) {
+        return stewardService.authentication(stewardService.findByUsername(authDTO.getUsername()), authDTO.getPw());
     }
     
 }

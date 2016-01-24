@@ -47,8 +47,10 @@ public interface StewardService {
     /**
      * Creates new Steward
      * @param steward 
+     * @param password not hashed pw
+     * @return stewards id
      */
-    public Long createSteward(Steward steward);
+    public Long createSteward(Steward steward, String password);
     
     /**
      * Removes Steward
@@ -59,8 +61,9 @@ public interface StewardService {
     /**
      * Updates Steward
      * @param update Update with new name
+     * @param password not hashed pw
      */
-    public void updateSteward(Steward update);
+    public void updateSteward(Steward update, String password);
     
     /**
      * Finds stewards, that are not assigned to a flight during given period
@@ -101,4 +104,8 @@ public interface StewardService {
      * @return 
      */
     public List<Steward> findAvailableStewardsAtLocation(long locationId);
+    
+    public Steward findByUsername(String username);
+    
+    public boolean authentication(Steward steward, String pw);
 }

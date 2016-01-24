@@ -1,6 +1,7 @@
 package cz.muni.fi.mvc.forms;
 
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
+import cz.muni.fi.airportapi.dto.UpdateStewardDTO;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import org.slf4j.Logger;
@@ -14,13 +15,13 @@ import org.springframework.validation.Validator;
  * Validates, if there is already a steward with given Personal Ident
  * @author Sebastian Kupka
  */
-public class StewardCreationalDTOValidator implements Validator {
+public class StewardUpdateDTOValidator implements Validator {
     
-    final static Logger log = LoggerFactory.getLogger(StewardCreationalDTOValidator.class);
+    final static Logger log = LoggerFactory.getLogger(StewardUpdateDTOValidator.class);
 
     private StewardFacade stewardFacade;
 
-    public StewardCreationalDTOValidator(StewardFacade stewardFacade) {
+    public StewardUpdateDTOValidator(StewardFacade stewardFacade) {
         this.stewardFacade = stewardFacade;
     }
     
@@ -28,7 +29,7 @@ public class StewardCreationalDTOValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return StewardCreationalDTO.class.isAssignableFrom(clazz);
+        return UpdateStewardDTO.class.isAssignableFrom(clazz);
     }
 
     @Override
@@ -37,17 +38,15 @@ public class StewardCreationalDTOValidator implements Validator {
             return;
         }
         try {
-            StewardCreationalDTO stewardCreationalDTO = (StewardCreationalDTO) target;
-            if (stewardCreationalDTO.getPersonalIdentificator().matches("[0-9,A-Z]{3}-\\d{5}") &&
-                    stewardFacade.getStewardWithPersonalIdentificator(stewardCreationalDTO.getPersonalIdentificator()) != null) {
-                errors.rejectValue("personalIdentificator", "StewardCreationalDTOValidator.invalid.personalIdetificator");
-            }
-            if (stewardFacade.getStewardWithUsername(stewardCreationalDTO.getUsername()) != null) {
-                errors.rejectValue("username", "StewardCreationalDTOValidator.invalid.username");
-            }
-            if (stewardCreationalDTO.getPassword() == null 
+            UpdateStewardDTO updateStewardDTO = (UpdateStewardDTO) target;
+            
+            if (updateStewardDTO.getPassword() == null) {
+                return;
+            } else if (updateStewardDTO.getPassword().isEmpty()) {
+                updateStewardDTO.setPassword(null);
+            } else if (updateStewardDTO.getPassword() == null 
                     //|| stewardCreationalDTO.getPassword().length() < 5
-                    || !stewardCreationalDTO.getPassword().matches("(?=.*[A-Z]).*\\d+.*")) {
+                    || !updateStewardDTO.getPassword().matches("(?=.*[A-Z]).*\\d+.*")) {
                 errors.rejectValue("password", "StewardCreationalDTOValidator.invalid.password");
             }
         } catch (Exception e) {

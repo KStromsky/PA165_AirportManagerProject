@@ -228,6 +228,7 @@ public class AirplaneDaoTest extends AbstractTestNGSpringContextTests {
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("bbb");
         s1.setGender(Gender.MALE);
 
         Steward s2 = new Steward();
@@ -236,6 +237,7 @@ public class AirplaneDaoTest extends AbstractTestNGSpringContextTests {
         s2.setPersonalIdentificator("111-11112");
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
+        s2.setUsername("aaa");
         s2.setGender(Gender.MALE);
 
         Steward s3 = new Steward();
@@ -244,6 +246,7 @@ public class AirplaneDaoTest extends AbstractTestNGSpringContextTests {
         s3.setPersonalIdentificator("111-11113");
         s3.setDateOfBirth(formatter.parse("1988/02/02"));
         s3.setEmploymentDate(formatter.parse("2014/03/01"));
+        s3.setUsername("ccc");
         s3.setGender(Gender.FEMALE);
 
         Steward s4 = new Steward();
@@ -252,6 +255,7 @@ public class AirplaneDaoTest extends AbstractTestNGSpringContextTests {
         s4.setPersonalIdentificator("111-11114");
         s4.setDateOfBirth(formatter.parse("1988/02/02"));
         s4.setEmploymentDate(formatter.parse("2014/03/01"));
+        s4.setUsername("ddd");
         s4.setGender(Gender.FEMALE);
 
         stewardDao.create(s1);
@@ -365,6 +369,7 @@ public class AirplaneDaoTest extends AbstractTestNGSpringContextTests {
         s1.setPersonalIdentificator("111-11111");
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
+        s1.setUsername("bbb");
         s1.setGender(Gender.MALE);
 
         stewardDao.create(s1);

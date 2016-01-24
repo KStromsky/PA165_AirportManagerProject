@@ -1,17 +1,13 @@
 package cz.muni.fi.mvc.security;
 
-import cz.muni.fi.airportapi.dto.UserAuthenticateDTO;
-import cz.muni.fi.airportapi.dto.UserDTO;
-import cz.muni.fi.airportapi.facade.UserFacade;
+import cz.muni.fi.airportapi.dto.StewardDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 
 /**
@@ -19,7 +15,8 @@ import java.io.IOException;
  *
  * @author Jakub Stromský
  */
-@WebFilter(urlPatterns = {"/steward/*", "/flight/*", "/destination/*", "/airplane/*"})
+@WebFilter(urlPatterns = {"/", "/steward/list", "/steward", "/steward/detail", "/steward/detail/*", 
+    "/steward/edit/*", "/steward/update/*", "/flight/*", "/destination/*", "/airplane/*"})
 public class ProtectFilter implements Filter {
 
     final static Logger log = LoggerFactory.getLogger(ProtectFilter.class);
@@ -30,49 +27,25 @@ public class ProtectFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) r;
         HttpServletResponse response = (HttpServletResponse) s;
 
-        String auth = request.getHeader("Authorization");
-        if (auth == null) {
-            response401(response);
-            return;
+        Object auth = request.getSession().getAttribute("authenticated");
+        if (auth != null && auth instanceof StewardDTO) {
+            StewardDTO steward = (StewardDTO) auth;
+            if (!steward.isIsAdmin() 
+                    && request.getRequestURL().toString().matches(".*new.*|.*create.*|.*update.*|.*edit.*")
+                    && !request.getRequestURL().toString().matches(".*/steward/.*/" + steward.getId().toString())) {
+                log.warn("requires admin to access");
+            } else {
+                chain.doFilter(request, response);
+                return;
+            }
+        } else {
+            log.warn("authentication fail");
         }
-        String[] creds = parseAuthHeader(auth);
-        String logname = creds[0];
-        String password = creds[1];
-
-        //get Spring context and UserFacade from it
-        UserFacade userFacade = WebApplicationContextUtils.getWebApplicationContext(r.getServletContext()).getBean(UserFacade.class);
-        UserDTO matchingUser = userFacade.findUserByUserName(logname);
-        if(matchingUser==null) {
-            log.warn("no user with user name {}", logname);
-            response401(response);
-            return;
-        }
-        UserAuthenticateDTO userAuthenticateDTO = new UserAuthenticateDTO();
-        userAuthenticateDTO.setUserId(matchingUser.getId());
-        userAuthenticateDTO.setPassword(password);
-        if (!userFacade.isAdmin(matchingUser)) {
-            log.warn("user not admin {}", matchingUser);
-            response401(response);
-            return;
-        }
-        if (!userFacade.authenticate(userAuthenticateDTO)) {
-            log.warn("wrong credentials: user={} password={}", creds[0], creds[1]);
-            response401(response);
-            return;
-        }
-        request.setAttribute("authenticatedUser", matchingUser);
-        chain.doFilter(request, response);
+        response401(response, request);
     }
 
-
-    private String[] parseAuthHeader(String auth) {
-        return new String(DatatypeConverter.parseBase64Binary(auth.split(" ")[1])).split(":", 2);
-    }
-
-    private void response401(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setHeader("WWW-Authenticate", "Basic realm=\"type userName and password\"");
-        response.getWriter().println("<html><body><h1>401 Unauthorized</h1> Go away ...</body></html>");
+    private void response401(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.sendRedirect(request.getContextPath()+"/login?access=False");
     }
 
     @Override

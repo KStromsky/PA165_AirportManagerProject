@@ -20,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StewardCreationalDTO {
     
     @NotNull
-    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}", message = "Valid personal info has to be filled in. \n Example: A1C-123456")
+    @Pattern(regexp="[0-9,A-Z]{3}-\\d{5}", message = "Valid personal info has to be filled in. \n Example: A1C-12345")
     private String personalIdentificator;
     @NotNull
     @Size(min=1, max=50)
@@ -36,6 +36,15 @@ public class StewardCreationalDTO {
     @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date employmentDate;
+    
+    @NotNull
+    @Size(min=1, max=50) 
+    private String username;
+    
+    @NotNull
+    @Size(min = 5, max = 20)
+    private String password;
+    
 
     /**
      * Gets the personal identificator of steward
@@ -133,6 +142,22 @@ public class StewardCreationalDTO {
         this.employmentDate = employmentDate;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -157,13 +182,14 @@ public class StewardCreationalDTO {
 
     @Override
     public String toString() {
-        return "StewardCreationalDTO{" + 
-                "personalIdentificator=" + personalIdentificator + 
-                ", firstname=" + firstname + 
-                ", surname=" + surname + 
-                ", gender=" + gender + 
-                ", dateOfBirth=" + dateOfBirth + 
-                ", employmentDate=" + employmentDate + 
-                '}';
+        return "StewardCreationalDTO{" + "personalIdentificator=" + personalIdentificator 
+                + ", firstname=" + firstname 
+                + ", surname=" + surname 
+                + ", gender=" + gender 
+                + ", dateOfBirth=" + dateOfBirth 
+                + ", employmentDate=" + employmentDate 
+                + ", username=" + username + '}';
     }
+
+    
 }

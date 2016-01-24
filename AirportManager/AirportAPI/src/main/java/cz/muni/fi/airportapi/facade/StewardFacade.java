@@ -8,7 +8,8 @@ package cz.muni.fi.airportapi.facade;
 import cz.muni.fi.airportapi.dto.StewardCreationalDTO;
 import cz.muni.fi.airportapi.dto.StewardDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
-import cz.muni.fi.airportapi.dto.UpdateStewardNameDTO;
+import cz.muni.fi.airportapi.dto.StewardAuthDTO;
+import cz.muni.fi.airportapi.dto.UpdateStewardDTO;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,13 @@ public interface StewardFacade {
      * @return 
      */
     public StewardDTO getStewardWithId(Long id);
+    
+    /**
+     * Gets Steward Update DTO with given id.
+     * @param id identificator
+     * @return 
+     */
+    public UpdateStewardDTO getUpdateStewardWithId(Long id);
     
     /**
      * Gets Steward DTO with personal identificator.
@@ -61,7 +69,7 @@ public interface StewardFacade {
      * Updates Steward DTO Name
      * @param update Update with new name
      */
-    public void updateStewardName(UpdateStewardNameDTO update);
+    public void updateStewardName(UpdateStewardDTO update);
     
     /**
      * Gets all Stewards' DTO at given location.
@@ -85,4 +93,8 @@ public interface StewardFacade {
      * @return 
      */
     public List<StewardDTO> findSpecificStewards(Date fromDate, Date toDate, Long locationId);
+    
+    public StewardDTO getStewardWithUsername(String username);
+    
+    public boolean authentication(StewardAuthDTO authDTO);
 }

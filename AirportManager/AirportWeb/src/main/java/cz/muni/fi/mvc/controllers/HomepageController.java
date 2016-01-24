@@ -1,5 +1,6 @@
 package cz.muni.fi.mvc.controllers;
 
+import cz.muni.fi.airportapi.dto.StewardAuthDTO;
 import cz.muni.fi.airportapi.dto.UserAuthenticateDTO;
 import cz.muni.fi.airportapi.dto.UserDTO;
 import cz.muni.fi.airportapi.facade.StewardFacade;
@@ -25,6 +26,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,102 +39,65 @@ public class HomepageController {
     final static Logger log = LoggerFactory.getLogger(HomepageController.class);
 
     @Autowired
-    private UserFacade userFacade;
+    private StewardFacade stewardFacade;
 
 //    @RequestMapping(method = RequestMethod.GET)
 //    public String home(Model model) {
 //        return "home";
 //    }
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public String displayLogin(Model model, HttpServletRequest request) {
+    public String displayLogin(Model model, HttpServletRequest request, UriComponentsBuilder uriBuilder) {
 
-        HttpSession session = request.getSession(true);
-        String user = (String) session.getAttribute("user");
-
-        if (user == null) {
-            UserAuthenticateDTO userAuth = new UserAuthenticateDTO();
-            model.addAttribute("valid", false);
-            model.addAttribute("userAuth", userAuth);
+        if ( request.getSession().getAttribute("authenticated") != null) {
+            return "home";
         } else {
-            model.addAttribute("valid", true);
-            model.addAttribute("user", user);
+            return "redirect:" + uriBuilder.path("/login").toUriString();
         }
-        return "home";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String executeLogin(Model model, HttpServletRequest request,
-            @Valid @ModelAttribute("userAuth") UserAuthenticateDTO userAuth,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-
-        try {
-            if (bindingResult.hasErrors()) {
-                for (FieldError fe : bindingResult.getFieldErrors()) {
-                    model.addAttribute(fe.getField() + "_error", true);
-                    log.trace("FieldError: {}", fe);
-                }
-                for (ObjectError ge : bindingResult.getGlobalErrors()) {
-                    log.trace("ObjectError: {}", ge);
-                }
-                return "home";
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String logingGet(@RequestParam(value = "access", required = false, defaultValue = "True") boolean access,
+            Model model, HttpServletRequest request, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes) 
+    {
+        if ( request.getSession().getAttribute("authenticated") != null) {
+            if (!access) {
+                redirectAttributes.addFlashAttribute("alert_danger", "You cannot access given page. Administator rights are required.");
             }
-
-            HttpSession session = request.getSession(true);
-            if (session != null) {
-                if (authenticate(session, userAuth)) {
-                    redirectAttributes.addFlashAttribute("alert_success", "Succesfull login");
-                    return "redirect:" + uriBuilder.path("home").toUriString();
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("alert_danger", "login Failed");
-                return "redirect:" + uriBuilder.path("home").toUriString();
-            }
-        } catch (Exception e) {
-            log.trace("error in auth page");
+            return "redirect:" + uriBuilder.path("/").toUriString();
         }
-        return "home";
+        if (!access) {
+            model.addAttribute("alert_danger", "Login required to access given page.");
+        }
+        model.addAttribute("authSteward", new StewardAuthDTO());
+        return "login";
     }
+    
+    @RequestMapping(value = "/loged", method = RequestMethod.POST)
+    public String loginPost(@Valid
+            @ModelAttribute("authSteward") StewardAuthDTO formBean, BindingResult bindingResult,
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request
+    ) {
+        if (bindingResult.hasErrors()) {
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public String executeLogout(Model model, HttpServletRequest request,
-            RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
-
-        try {
-            HttpSession session = request.getSession(true);
-            if (session != null) {
-                session.setAttribute("user", null);
-                session.setAttribute("passHash", null);
-                redirectAttributes.addFlashAttribute("alert_success", "Succesfull logout");
-                return "redirect:" + uriBuilder.path("home").toUriString();
-            }
-        } catch (Exception e) {
-            log.trace("error in auth page");
-            redirectAttributes.addFlashAttribute("alert_danger", "logout Failed");
-            return "redirect:" + uriBuilder.path("home").toUriString();
+            return "login";
         }
-        return "home";
+        if (!stewardFacade.authentication(formBean)) {
+            redirectAttributes.addFlashAttribute("alert_danger", "authentication for \"" + formBean.getUsername() +"\" failed");
+            return "redirect:" + uriBuilder.path("/login").toUriString();
+        }
+        
+        redirectAttributes.addFlashAttribute("alert_info", "Succesfully loged in");
+        request.getSession().setAttribute("authenticated", stewardFacade.getStewardWithUsername(formBean.getUsername()));
+        return "redirect:/";
     }
-
-    private boolean authenticate(HttpSession session, UserAuthenticateDTO userAuth) {
-
-        UserDTO matchingUser = userFacade.findUserByUserName(userAuth.getUserName());
-        userAuth.setUserId(matchingUser.getId());
-
-        if (matchingUser == null) {
-            log.warn("no user with user name {}", userAuth.getUserName());
-            return false;
-        }
-        if (!userFacade.authenticate(userAuth)) {
-            log.warn("wrong credentials: user={} password={}", userAuth.getUserName(), userAuth.getPassword());
-            session.setAttribute("user", null);
-            session.setAttribute("passHash", null);
-            return false;
-        } else {
-            session.setAttribute("user", matchingUser.getUserName());
-            session.setAttribute("passHash", matchingUser.getPasswordHash());
-        }
-
-        return true;
+    
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(Model model, HttpServletRequest request
+    ) {
+        request.getSession().removeAttribute("authenticated");
+        model.addAttribute("alert_info", "loged out");
+        model.addAttribute("authSteward", new StewardAuthDTO());
+        return "/login";
     }
+    
 }

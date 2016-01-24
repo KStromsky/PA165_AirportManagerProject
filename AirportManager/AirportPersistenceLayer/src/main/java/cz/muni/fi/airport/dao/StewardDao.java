@@ -83,4 +83,6 @@ public interface StewardDao {
      * @return 
      */
     public List<Flight> findLastStewardFlights(Steward steward);
+    
+    public Steward findByUsername(String username);
 }

@@ -12,6 +12,7 @@ import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import cz.muni.fi.airportservicelayer.config.ServiceTestConfiguration;
 import cz.muni.fi.mvc.forms.StewardCreationalDTOValidator;
+import cz.muni.fi.mvc.forms.StewardUpdateDTOValidator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +88,10 @@ public class StewardController {
         if (binder.getTarget() instanceof StewardCreationalDTO) {
             binder.addValidators(new StewardCreationalDTOValidator(stewardFacade));
         }
+        
+        if (binder.getTarget() instanceof UpdateStewardDTO) {
+            binder.addValidators(new StewardUpdateDTOValidator(stewardFacade));
+        }
     }
 
     @ModelAttribute("genders")
@@ -122,7 +128,7 @@ public class StewardController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/create")
     public String create(@Valid @ModelAttribute("stewardCreate") StewardCreationalDTO formBean, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+            Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             for (FieldError fe : bindingResult.getFieldErrors()) {
                 model.addAttribute(fe.getField() + "_error", true);
@@ -133,6 +139,7 @@ public class StewardController {
             }
             return "steward/new";
         }
+        Long id = 0L;
         try {
 //            if (stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()) != null) {
 //                bindingResult.addError(new FieldError("stewardCreate", "personalIdentificator",
@@ -142,14 +149,57 @@ public class StewardController {
 //                model.addAttribute("personalIdentificator_error", true);
 //                return "steward/new";
 //            }
-
-            Long id = stewardFacade.createSteward(formBean);
+            id = stewardFacade.createSteward(formBean);
             redirectAttributes.addFlashAttribute("alert_info", "Steward with id: " + id + " was created");
         } catch (Exception ex) {
             model.addAttribute("alert_danger", "Steward was not created because of some unexpected error");
             redirectAttributes.addFlashAttribute("alert_danger", "Steward was not created because of some unexpected error");
         }
+        request.getSession().setAttribute("authenticated", stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()));
         return "redirect:" + uriBuilder.path("/steward").toUriString();
+    }
+    
+    /**
+     * Prepares edit form.
+     *
+     * @param id, model
+     * @return JSP page name
+     */
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String editSteward(@PathVariable("id") long id, 
+            RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Model model) 
+    {    
+        UpdateStewardDTO steward = stewardFacade.getUpdateStewardWithId(id);
+        
+        if (steward == null) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Steward " + id + " cannot be updated");
+            return "redirect:" + uriBuilder.path("/steward/list").toUriString();
+        }
+        
+        model.addAttribute("steward", steward);
+        return "steward/edit";
+    }
+    
+    /**
+     * Updates steward
+     *
+     * @param id, modelAttribute, bindingResult, model, redirectAttributes, uriBuilder
+     * @return JSP page
+     */
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String updateSteward(@PathVariable("id") long id, @Valid @ModelAttribute("steward") UpdateStewardDTO updatedSteward, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
+        
+        try {
+            StewardDTO steward = stewardFacade.getStewardWithId(id);
+            stewardFacade.updateStewardName(updatedSteward);
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Steward " + id + " wasn't updated because of some unknow error");
+            return "redirect:" + uriBuilder.path("/steward/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+
+        redirectAttributes.addFlashAttribute("alert_info", "Steward " + id + " was updated");
+        return "redirect:" + uriBuilder.path("/steward/detail/{id}").buildAndExpand(id).encode().toUriString();
     }
 
     /**
@@ -187,14 +237,14 @@ public class StewardController {
      * @return jsp page
      */
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id, Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+    public String detail(@PathVariable long id, Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, HttpServletRequest request) {
         try {
             model.addAttribute("steward", stewardFacade.getStewardWithId(id));
             model.addAttribute("flights", stewardFacade.getStewardFlights(id));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("alert_danger", "Steward with id: " + id + " was not found.");
             return "redirect:" + uriBuilder.path("/steward").toUriString();
-        }
+        }        
         return "steward/detail";
     }
 

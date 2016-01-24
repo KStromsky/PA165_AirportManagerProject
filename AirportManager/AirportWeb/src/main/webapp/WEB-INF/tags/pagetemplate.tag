@@ -43,13 +43,23 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="${pageContext.request.requestURI.contains("/steward") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/steward">Stewards</a></li>
-                        <li class="${pageContext.request.requestURI.contains("/destination") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/destination">Destinations</a></li>
-                        <li class="${pageContext.request.requestURI.contains("/airplane") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/airplane">Airplanes</a></li>
-                        <li class="${pageContext.request.requestURI.contains("/flight") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/flight">Flights</a></li>
-                        <li class="${pageContext.request.requestURI.contains("/user") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/user">Users</a></li>
-                    </ul>
+                        <ul class="nav navbar-nav">
+                            <li class="${pageContext.request.requestURI.contains("/steward") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/steward">Stewards</a></li>
+                            <li class="${pageContext.request.requestURI.contains("/destination") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/destination">Destinations</a></li>
+                            <li class="${pageContext.request.requestURI.contains("/airplane") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/airplane">Airplanes</a></li>
+                            <li class="${pageContext.request.requestURI.contains("/flight") ? 'active' : ''}"><a href="${pageContext.request.contextPath}/flight">Flights</a></li>
+                        </ul>
+                    <c:if test="${empty authenticated}">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="${pageContext.request.requestURI.contains("/steward/new") ? 'active' :''}"><a href="${pageContext.request.contextPath}/steward/new">Sign up</a></li>                       
+                        </ul>
+                    </c:if>
+                    <c:if test="${not empty authenticated}">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="${pageContext.request.contextPath}/steward/detail/${authenticated.id}">${authenticated.firstname}${" "}${authenticated.surname}</a></li>
+                            <li class="${pageContext.request.requestURI.contains("/logout") ? 'active' :''}"><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                        </ul>
+                    </c:if>
                 </div>
             </div>
         </nav>

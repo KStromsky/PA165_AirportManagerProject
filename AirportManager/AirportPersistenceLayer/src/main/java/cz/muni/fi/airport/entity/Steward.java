@@ -60,7 +60,16 @@ public class Steward {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date employmentDate;
-
+    
+    @NotNull
+    private boolean isAdmin;
+    
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String username;
+    
+    String pwHash;
+    
     /**
      * Gets the entity Database ID
      * @return personal identificator
@@ -163,6 +172,30 @@ public class Steward {
      */
     public void setEmploymentDate(Date employmentDate) {
         this.employmentDate = employmentDate;
+    }
+
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPwHash() {
+        return pwHash;
+    }
+
+    public void setPwHash(String pwHash) {
+        this.pwHash = pwHash;
     }
 
     @Override
