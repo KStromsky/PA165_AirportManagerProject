@@ -40,9 +40,6 @@ public class DataLoadingFacade {
     @Autowired
     private FlightService flightService;
 
-    @Autowired
-    private UserService userService;
-
     public void loadData() throws ParseException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
@@ -86,7 +83,7 @@ public class DataLoadingFacade {
         s1.setDateOfBirth(formatter.parse("1988/02/02"));
         s1.setEmploymentDate(formatter.parse("2014/03/01"));
         s1.setUsername("hank");
-        s1.setIsAdmin(true);
+        s1.setAdmin(true);
         s1.setGender(Gender.MALE);
 
         stewardService.createSteward(s1,"heslo");
@@ -98,7 +95,7 @@ public class DataLoadingFacade {
         s2.setDateOfBirth(formatter.parse("1988/02/02"));
         s2.setEmploymentDate(formatter.parse("2014/03/01"));
         s2.setUsername("peter");
-        s2.setIsAdmin(false);
+        s2.setAdmin(false);
         s2.setGender(Gender.MALE);
 
         stewardService.createSteward(s2, "heslo");
@@ -110,7 +107,7 @@ public class DataLoadingFacade {
         s3.setDateOfBirth(formatter.parse("1988/02/02"));
         s3.setEmploymentDate(formatter.parse("2014/03/01"));
         s3.setUsername("joan");
-        s3.setIsAdmin(false);
+        s3.setAdmin(false);
         s3.setGender(Gender.FEMALE);
 
         stewardService.createSteward(s3, "heslo");
@@ -135,15 +132,5 @@ public class DataLoadingFacade {
         f2.addSteward(s3);
 
         flightService.create(f2);
-
-        User user = new User();
-        user.setAdmin(false);
-        user.setUserName("user");
-        userService.registerUser(user, "user");
-
-        User admin = new User();
-        admin.setAdmin(true);
-        admin.setUserName("admin");
-        userService.registerUser(admin, "admin");
     }
 }

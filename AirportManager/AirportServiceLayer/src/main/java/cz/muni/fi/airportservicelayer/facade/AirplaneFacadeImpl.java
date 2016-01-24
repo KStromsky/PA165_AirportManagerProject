@@ -72,6 +72,11 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
     public List<AirplaneDTO> getAvailableAirplanes(Date from, Date to) {
         return beanMappingservice.mapTo(airplaneService.findAvailableAirplanes(from, to), AirplaneDTO.class);
     }
+    
+    @Override
+    public List<AirplaneDTO> getAvailableAirplanes(String subname, String type, int capacity) {
+        return beanMappingservice.mapTo(airplaneService.findAvailableAirplanes(subname, type, capacity), AirplaneDTO.class);
+    }
 
     @Override
     public List<FlightDTO> getAirplaneFlights(Long id) {

@@ -31,6 +31,15 @@ public interface StewardService {
     public Steward findByPersonalIdentificator(String personalIdentificator);
     
     /**
+     * Gets Stewards with given partail name and personal identificator.
+     * @param personalIdentificator part of personal identificator
+     * @param name part of first name
+     * @param surname part of second name
+     * @return 
+     */
+    public List<Steward> getRelevantStewards(String personalIdentificator, String name, String surname);
+    
+    /**
      * Lists all Stewards.
      * @return 
      */

@@ -25,43 +25,33 @@ import javax.validation.constraints.Pattern;
 //In Derby, its forbiden to 'USER' is reserved keyword, we need to rename table 
 @Table(name = "Users")
 public class User {
-
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String passwordHash;
-
-    @Column(nullable = false, unique = true)
-    @NotNull
-    private String userName;
-
-    private boolean admin;
-
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    protected Long id;
+    
+    // Setter pre testy
+    public void setId(Long id) {
+        this.id = id;
+    } 
+    
+    /**
+     * Gets the entity Database ID
+     * @return personal identificator
+     */
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
+    
+    @NotNull
+    protected boolean admin;
+    
+    @NotNull
+    @Column(nullable = false, unique = true)
+    protected String username;
+    
+    protected String pwHash;
+    
     public boolean isAdmin() {
         return admin;
     }
@@ -70,11 +60,27 @@ public class User {
         this.admin = admin;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPwHash() {
+        return pwHash;
+    }
+
+    public void setPwHash(String pwHash) {
+        this.pwHash = pwHash;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+        result = prime * result + ((this.getUsername() == null) ? 0 : this.getUsername().hashCode());
         return result;
     }
 
@@ -90,11 +96,11 @@ public class User {
             return false;
         }
         User other = (User) obj;
-        if (userName == null) {
-            if (other.getUserName() != null) {
+        if (this.getUsername() == null) {
+            if (other.getUsername() != null) {
                 return false;
             }
-        } else if (!userName.equals(other.getUserName())) {
+        } else if (!this.getUsername().equals(other.getUsername())) {
             return false;
         }
         return true;
@@ -103,9 +109,8 @@ public class User {
     @Override
     public String toString() {
         return "User{"
-                + "id=" + id
-                + ", passwordHash='" + passwordHash + '\''
-                + ", userName='" + userName + '\''
+                + "pwHash='" + pwHash + '\''
+                + ", username='" + username + '\''
                 + ", admin=" + admin
                 + '}';
     }

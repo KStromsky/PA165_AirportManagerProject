@@ -25,27 +25,17 @@
                     <label> </label>
                 </div>
             <form action="${pageContext.request.contextPath}/airplane">
-
-                <div class="col-md-2">
-                    <label>Available From</label>
-                    <input class="form-control" type="date" name="dateFromStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateFromStr}">
+                <div class="col-md-3">
+                    <label>Name</label>
+                    <input class="form-control" name="name"  value="${param.name}">
                 </div>
-                <div class="col-md-2">
-                    <label>Available To</label>
-                    <input class="form-control" type="date" name="dateToStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateToStr}">
+                <div class="col-md-3">
+                    <label>Type</label>
+                    <input class="form-control" name="type"  value="${param.type}">
                 </div>
                 <div class="col-md-1">
                     <label>Capacity</label>
                     <input class="form-control" type="number" min="0" max="100000" name="capacity"  value="${param.capacity}">
-                </div>
-                <div class="col-md-3">
-                    <label>Destination</label>
-                    <select class="form-control" name="destination">
-                        <option value="" selected>None</option>
-                        <c:forEach items="${destinations}" var="destination">
-                            <option value="${destination.location}" ${param.destination == destination.location ? 'selected' : ''}>${destination.location}</option>
-                        </c:forEach>
-                    </select>
                 </div>
                 
                 <div class="col-md-4">

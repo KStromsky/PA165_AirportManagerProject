@@ -4,7 +4,6 @@ import cz.muni.fi.airportapi.dto.StewardAuthDTO;
 import cz.muni.fi.airportapi.dto.UserAuthenticateDTO;
 import cz.muni.fi.airportapi.dto.UserDTO;
 import cz.muni.fi.airportapi.facade.StewardFacade;
-import cz.muni.fi.airportapi.facade.UserFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
 import static cz.muni.fi.mvc.controllers.StewardController.log;
 import cz.muni.fi.mvc.security.ProtectFilter;

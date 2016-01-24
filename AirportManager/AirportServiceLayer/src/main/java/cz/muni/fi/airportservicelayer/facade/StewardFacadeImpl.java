@@ -60,6 +60,14 @@ public class StewardFacadeImpl implements StewardFacade {
         }
         return beanMappingservice.mapTo(steward, StewardDTO.class);
     }
+    
+    public List<StewardDTO> getRelevantStewards(String personalIdentificator, String name, String surname) {
+        List<Steward> stewards = stewardService.getRelevantStewards(personalIdentificator, name, surname);
+        if (stewards == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(stewards, StewardDTO.class);
+    }
 
     @Override
     public List<StewardDTO> getAllStewards() {
@@ -78,7 +86,7 @@ public class StewardFacadeImpl implements StewardFacade {
         createSteward.setEmploymentDate(steward.getEmploymentDate());
         createSteward.setFirstname(steward.getFirstname());
         createSteward.setGender(steward.getGender());
-        createSteward.setIsAdmin(false);
+        createSteward.setAdmin(false);
         createSteward.setPersonalIdentificator(steward.getPersonalIdentificator());
         createSteward.setSurname(steward.getSurname());
         createSteward.setUsername(steward.getUsername());

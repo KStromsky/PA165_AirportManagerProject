@@ -235,28 +235,20 @@ public class AirplaneController {
      * @return jsp page
      */ 
     @RequestMapping()
-    public String list(@RequestParam(value = "destination", required = false) String location,
-            @RequestParam(value = "dateFromStr", required = false) String dateFromStr,
-            @RequestParam(value = "dateToStr", required = false) String dateToStr,
+    public String list(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "capacity", required = false, defaultValue = "0") int capacity,
             @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
 
-        Date dateTo = null;
-        Date dateFrom = null;
-
         StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/airplane").toUriString());
         sb.append("?");
-        if (location != null) {
-            sb.append("destination=" + location);
+        if (name != null) {
+            sb.append("name=" + name);
             sb.append("&");
         }
-        if (dateFromStr != null && !dateFromStr.isEmpty()) {
-            sb.append("dateFromStr=" + dateFromStr);
-            sb.append("&");
-        }
-        if (dateToStr != null && !dateToStr.isEmpty()) {
-            sb.append("dateToStr=" + dateToStr);
+        if (type != null) {
+            sb.append("type=" + type);
             sb.append("&");
         }
         if (capacity > 0) {
@@ -267,38 +259,9 @@ public class AirplaneController {
 
         String returnURI = sb.toString();
 
-        if (!invalid) {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            formatter.setLenient(false);
-            if (dateFromStr != null && !dateFromStr.isEmpty()) {
-                try {
-                    dateFrom = formatter.parse(dateFromStr);
-                } catch (ParseException ex) {
-                    log.debug("Parsing error - ignoring From Date", ex);
-                    redirectAttributes.addFlashAttribute("alert_danger", "Available From is not a valid Date!");
-                    return returnURI;
-                }
-            }
-            if (dateToStr != null && !dateToStr.isEmpty()) {
-                try {
-                    dateTo = formatter.parse(dateToStr);
-                } catch (ParseException ex) {
-                    log.debug("Parsing error - ignoring To Date", ex);
-                    redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
-                    return returnURI;
-                }
-            }
-
-            if (dateFrom != null && dateTo != null && dateFrom.compareTo(dateTo) > 0) {
-                redirectAttributes.addFlashAttribute("alert_danger", "Available From is later than Available To");
-                return returnURI;
-            }
-            
+        if (!invalid) {       
             try {
-                if (location != null && destinationFacade.getDestinationWithLocation(location).isEmpty()) {
-                    location = null;
-                }
-                List<AirplaneDTO> airplanes = airplaneFacade.getSpecificAirplanes(dateFrom, dateTo, capacity, location); 
+                List<AirplaneDTO> airplanes = airplaneFacade.getAvailableAirplanes(name, type, capacity);
                 model.addAttribute("airplanes", airplanes);
                 Map<Long, List<FlightDTO>> airplanesFlights = new HashMap<>();
                 for (AirplaneDTO airplane : airplanes) {

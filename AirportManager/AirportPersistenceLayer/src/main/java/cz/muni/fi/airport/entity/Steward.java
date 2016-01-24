@@ -6,6 +6,7 @@
 package cz.muni.fi.airport.entity;
 
 import cz.muni.fi.airport.enums.Gender;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -27,16 +28,7 @@ import javax.validation.constraints.Pattern;
  * @author Sebastian Kupka
  */
 @Entity
-public class Steward {
-    
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
-
-    // Setter pre testy
-    public void setId(Long id) {
-        this.id = id;
-    } 
+public class Steward extends User implements Serializable {
     
     @NotNull
     @Column(nullable=false,unique=true)
@@ -60,23 +52,6 @@ public class Steward {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date employmentDate;
-    
-    @NotNull
-    private boolean isAdmin;
-    
-    @NotNull
-    @Column(nullable = false, unique = true)
-    private String username;
-    
-    String pwHash;
-    
-    /**
-     * Gets the entity Database ID
-     * @return personal identificator
-     */
-    public Long getId() {
-        return id;
-    }
 
     /**
      * Gets the personal identificator of steward
@@ -172,30 +147,6 @@ public class Steward {
      */
     public void setEmploymentDate(Date employmentDate) {
         this.employmentDate = employmentDate;
-    }
-
-    public boolean isIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPwHash() {
-        return pwHash;
-    }
-
-    public void setPwHash(String pwHash) {
-        this.pwHash = pwHash;
     }
 
     @Override

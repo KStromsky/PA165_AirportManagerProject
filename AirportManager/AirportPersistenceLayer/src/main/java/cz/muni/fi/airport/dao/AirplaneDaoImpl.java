@@ -46,7 +46,12 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
     @Override
     public List<Airplane> findByName(String name) {
-        return em.createQuery("SELECT a FROM Airplane a WHERE a.name like :name ",
+        if (name == null) {
+            name = new String();
+        } else {
+            name = name.toLowerCase();
+        }
+        return em.createQuery("SELECT a FROM Airplane a WHERE Lower(a.name) like :name ",
                 Airplane.class).setParameter("name", "%" + name + "%").getResultList();
     }
         
