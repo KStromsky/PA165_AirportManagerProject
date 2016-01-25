@@ -23,7 +23,7 @@
                     <form:errors path="departure" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${origin_error?'has-error':''}">
+            <div class="form-group ${originId_error?'has-error':''}">
                 <form:label path="originId" cssClass="col-sm-1 control-label">Origin</form:label>
                 <div class="col-sm-4">
                     <form:select path="originId" cssClass="form-control">
@@ -34,7 +34,7 @@
                     <form:errors path="originId" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${destination_error?'has-error':''}">
+            <div class="form-group ${destinationId_error?'has-error':''}">
                 <form:label path="destinationId" cssClass="col-sm-1 control-label">Destination</form:label>
                 <div class="col-sm-4">
                     <form:select path="destinationId" cssClass="form-control">
@@ -45,7 +45,7 @@
                     <form:errors path="destinationId" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${airplane_error?'has-error':''}">
+            <div class="form-group ${airplaneId_error?'has-error':''}">
                 <form:label path="airplaneId" cssClass="col-sm-1 control-label">Airplane</form:label>
                 <div class="col-sm-4">
                     <form:select path="airplaneId" cssClass="form-control">
@@ -56,7 +56,7 @@
                     <form:errors path="airplaneId" cssClass="help-block"/>
                 </div>
             </div>
-            <div class="form-group ${stewards_error?'has-error':''}">
+            <div class="form-group ${stewardsIds_error?'has-error':''}">
                 <form:label path="stewardsIds" cssClass="col-sm-1 control-label">Stewards</form:label>
                 <div class="col-sm-4">
                     <form:select multiple="true" path="stewardsIds" cssClass="form-control">

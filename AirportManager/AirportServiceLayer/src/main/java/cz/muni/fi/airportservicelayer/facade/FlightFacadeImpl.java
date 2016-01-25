@@ -39,22 +39,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class FlightFacadeImpl implements FlightFacade {
-    
+
     @Autowired
     private FlightService flightService;
-    
+
     @Autowired
     private DestinationService destinationService;
-    
+
     @Autowired
     private AirplaneService airplaneService;
-    
+
     @Autowired
     private StewardService stewardService;
-    
+
     @Autowired
     private BeanMappingService beanMappingservice;
-    
+
     @Override
     public FlightDTO getFlightWithId(Long id) {
         Flight flight = flightService.findById(id);
@@ -130,27 +130,46 @@ public class FlightFacadeImpl implements FlightFacade {
         f.setAirplane(a);
         flightService.update(f);
     }
-    
+
     @Override
     public void updateFlightStewards(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
         List<Long> stewardsIds = update.getStewardsIds();
         List<Steward> stewards = new ArrayList<>();
-        for (Long id: stewardsIds) {
+        for (Long id : stewardsIds) {
             Steward s = stewardService.findById(id);
             stewards.add(s);
         }
         f.setStewards(stewards);
         flightService.update(f);
     }
-    
+
     @Override
     public UpdateFlightDTO getUpdateFlightWithId(Long id) {
         Flight flight = flightService.findById(id);
         if (flight == null) {
             return null;
         }
-        return beanMappingservice.mapTo(flight, UpdateFlightDTO.class);
+        UpdateFlightDTO update = beanMappingservice.mapTo(flight, UpdateFlightDTO.class);
+        if (flight.getAirplane() != null) {
+            update.setAirplaneId(flight.getAirplane().getId());
+        }
+        if (flight.getDestination()!= null) {
+            update.setDestinationId(flight.getDestination().getId());
+        }
+        if (flight.getOrigin()!= null) {
+            update.setOriginId(flight.getOrigin().getId());
+        }
+        
+        if (flight.getStewards() != null) {
+            List<Long> stewardsIds = new ArrayList<>();
+            for (Steward steward : flight.getStewards()) {
+                stewardsIds.add(steward.getId());
+            }
+            update.setStewardsIds(stewardsIds);
+        }
+        
+        return update;
     }
 
     @Override

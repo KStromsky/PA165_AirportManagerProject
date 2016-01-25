@@ -33,28 +33,32 @@ public class FlightUpdateDTOValidator implements Validator {
         }
         try {
             UpdateFlightDTO updatedFlight = (UpdateFlightDTO) target;
-            if (updatedFlight.getArrival() == null) {
-                 errors.rejectValue("arrival", "FlightUpdateDTOValidator.invalid.arrival");
-            }
-            if (updatedFlight.getDeparture() == null) {
-                 errors.rejectValue("departure", "FlightUpdateDTOValidator.invalid.departure");
-            }
-            if (updatedFlight.getDeparture().compareTo(updatedFlight.getArrival()) > 0) {
-                 errors.rejectValue("departure", "FlightCreationalDTOValidator.invalid.departure");
+
+            if (updatedFlight.getArrival() != null && updatedFlight.getDeparture() != null) {
+                if (updatedFlight.getDeparture().compareTo(updatedFlight.getArrival()) > 0) {
+                    errors.rejectValue("departure", "FlightCreationalDTOValidator.invalid.departure");
+                    errors.rejectValue("arrival", "FlightCreationalDTOValidator.invalid.departure");
+                }
+            } else {
+                if (updatedFlight.getArrival() == null) {
+                    errors.rejectValue("arrival", "FlightUpdateDTOValidator.invalid.arrival");
+                }
+                if (updatedFlight.getDeparture() == null) {
+                    errors.rejectValue("departure", "FlightUpdateDTOValidator.invalid.departure");
+                }
             }
 
-            if (updatedFlight.getOriginId().equals(updatedFlight.getDestinationId())) {
-                 errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
-                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.origin");
+            if (updatedFlight.getOriginId() != null && updatedFlight.getDestinationId() != null) {
+                if (updatedFlight.getOriginId().equals(updatedFlight.getDestinationId())) {
+                    errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
+                    errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.origin");
+                }
             }
             if (updatedFlight.getAirplaneId() == null) {
                 errors.rejectValue("airplaineId", "FlightUpdateDTOValidator.invalid.airplane");
             }
-            if (updatedFlight.getStewardsIds() == null) {
+            if (updatedFlight.getStewardsIds() == null || updatedFlight.getStewardsIds().isEmpty()) {
                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
-            }
-            if (updatedFlight.getStewardsIds().isEmpty()) {
-                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
             }
         } catch (Exception e) {
             log.debug(e.getMessage(), e);

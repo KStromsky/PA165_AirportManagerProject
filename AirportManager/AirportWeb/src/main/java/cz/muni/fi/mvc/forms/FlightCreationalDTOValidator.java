@@ -9,18 +9,19 @@ import org.springframework.validation.Validator;
 
 /**
  * Validates if Flight has valid input data.
+ *
  * @author Gabriela Podolnikova
  */
 public class FlightCreationalDTOValidator implements Validator {
-    
+
     final static Logger log = LoggerFactory.getLogger(FlightCreationalDTOValidator.class);
 
     private FlightFacade flightFacade;
-    
+
     public FlightCreationalDTOValidator(FlightFacade flightFacade) {
         this.flightFacade = flightFacade;
     }
-    
+
     @Override
     public boolean supports(Class<?> type) {
         return FlightCreationalDTO.class.isAssignableFrom(type);
@@ -33,27 +34,28 @@ public class FlightCreationalDTOValidator implements Validator {
         }
         try {
             FlightCreationalDTO flightCreationalDTO = (FlightCreationalDTO) target;
-            
-            if (flightCreationalDTO.getDeparture().compareTo(flightCreationalDTO.getArrival()) > 0) {
-                 errors.rejectValue("arrival", "FlightCreationalDTOValidator.invalid.arrival");
-                 errors.rejectValue("departure", "FlightCreationalDTOValidator.invalid.departure");
+
+            if (flightCreationalDTO.getDeparture() != null && flightCreationalDTO.getArrival() != null) {
+                if (flightCreationalDTO.getDeparture().compareTo(flightCreationalDTO.getArrival()) > 0) {
+                    errors.rejectValue("arrival", "FlightCreationalDTOValidator.invalid.arrival");
+                    errors.rejectValue("departure", "FlightCreationalDTOValidator.invalid.departure");
+                }
             }
-            if (flightCreationalDTO.getOriginId().equals(flightCreationalDTO.getDestinationId())) {
-                 errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
-                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.origin");
+            if (flightCreationalDTO.getOriginId() != null && flightCreationalDTO.getDestinationId() != null) {
+                if (flightCreationalDTO.getOriginId().equals(flightCreationalDTO.getDestinationId())) {
+                    errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
+                    errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.origin");
+                }
             }
             if (flightCreationalDTO.getAirplaneId() == null) {
                 errors.rejectValue("airplaineId", "FlightUpdateDTOValidator.invalid.airplane");
             }
-            if (flightCreationalDTO.getStewardsIds() == null) {
+            if (flightCreationalDTO.getStewardsIds() == null || flightCreationalDTO.getStewardsIds().isEmpty()) {
                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
-            }
-            if (flightCreationalDTO.getStewardsIds().isEmpty()) {
-                 errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
             }
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
         }
     }
-    
+
 }
