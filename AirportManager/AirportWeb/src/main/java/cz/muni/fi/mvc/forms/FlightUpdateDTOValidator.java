@@ -45,10 +45,13 @@ public class FlightUpdateDTOValidator implements Validator {
 
             if (updatedFlight.getOriginId().equals(updatedFlight.getDestinationId())) {
                  errors.rejectValue("destinationId", "FlightCreationalDTOValidator.invalid.destination");
-                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.destination");
+                 errors.rejectValue("originId", "FlightCreationalDTOValidator.invalid.origin");
             }
             if (updatedFlight.getAirplaneId() == null) {
-                errors.rejectValue("airplaineId", "FlightUpdateDTOValidator.invalid.airplan");
+                errors.rejectValue("airplaineId", "FlightUpdateDTOValidator.invalid.airplane");
+            }
+            if (updatedFlight.getStewardsIds() == null) {
+                errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");
             }
             if (updatedFlight.getStewardsIds().isEmpty()) {
                  errors.rejectValue("stewardsIds", "FlightCreationalDTOValidator.invalid.stewards");

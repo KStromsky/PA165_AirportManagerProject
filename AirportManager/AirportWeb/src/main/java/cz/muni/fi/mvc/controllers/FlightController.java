@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Import;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,8 +71,6 @@ public class FlightController {
     @Autowired
     private AirplaneFacade airplaneFacade;
     
-    
-    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -92,8 +91,7 @@ public class FlightController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/new")
     public String newFlight(Model model) {
-        FlightCreationalDTO flightCreate = new FlightCreationalDTO();
-        model.addAttribute("flightCreate", flightCreate);
+        model.addAttribute("flightCreate", new FlightCreationalDTO());
         model.addAttribute("destinations", destinationFacade.getAllDestinations());
         model.addAttribute("stewards", stewardFacade.getAllStewards());
         model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
@@ -121,8 +119,14 @@ public class FlightController {
             model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
             return "flight/new";
         }
-        Long id = flightFacade.createFlight(formBean);
-        redirectAttributes.addFlashAttribute("alert_info", "Flight with id: " + id + " was created");
+        Long id = 0L;
+        try {
+            id = flightFacade.createFlight(formBean);
+            redirectAttributes.addFlashAttribute("alert_info", "Flight with id: " + id + " was created");
+        } catch(Exception e) {
+            model.addAttribute("alert_danger", "Flight was not created because of some unexpected error");
+            redirectAttributes.addFlashAttribute("alert_danger", "Flight was not created because of some unexpected error");
+        }
         return "redirect:" + uriBuilder.path("/flight").toUriString();
     }
     
@@ -192,7 +196,19 @@ public class FlightController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String updateFlight(@PathVariable("id") long id, @Valid @ModelAttribute("flight") UpdateFlightDTO updatedFlight, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
-
+        if (bindingResult.hasErrors()) {
+            for (FieldError fe : bindingResult.getFieldErrors()) {
+                model.addAttribute(fe.getField() + "_error", true);
+                log.trace("FieldError: {}", fe);
+            }
+            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                log.trace("ObjectError: {}", ge);
+            }
+            model.addAttribute("destinations", destinationFacade.getAllDestinations());
+            model.addAttribute("stewards", stewardFacade.getAllStewards());
+            model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
+            return "flight/edit";
+        }
         try {
             FlightDTO flight = flightFacade.getFlightWithId(id);
             flightFacade.updateFlightArrival(updatedFlight);
