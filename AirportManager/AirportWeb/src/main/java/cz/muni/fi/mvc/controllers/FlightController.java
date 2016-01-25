@@ -1,23 +1,26 @@
 package cz.muni.fi.mvc.controllers;
 
-import cz.muni.fi.airport.entity.Destination;
 import cz.muni.fi.airport.enums.Location;
 import cz.muni.fi.airportapi.dto.DestinationDTO;
 import cz.muni.fi.airportapi.dto.FlightCreationalDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
-import cz.muni.fi.airportapi.dto.StewardDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightStewardsDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightsAirplaneDTO;
 import cz.muni.fi.airportapi.facade.AirplaneFacade;
 import cz.muni.fi.airportapi.facade.DestinationFacade;
 import cz.muni.fi.airportapi.facade.FlightFacade;
 import cz.muni.fi.airportapi.facade.StewardFacade;
 import cz.muni.fi.airportservicelayer.config.FacadeTestConfiguration;
-import static cz.muni.fi.mvc.controllers.StewardController.log;
-import java.text.DateFormat;
-import java.text.ParseException;
+import cz.muni.fi.mvc.forms.FlightCreationalDTOValidator;
+import cz.muni.fi.mvc.forms.FlightUpdateDTOValidator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,7 +29,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
@@ -47,7 +49,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * SpringMVC Controller for Flight management
- * @author Gabi
+ * @author Gabriela Podolnikova
  */
 @Import({FacadeTestConfiguration.class})
 @RequestMapping("/flight")
@@ -74,7 +76,13 @@ public class FlightController {
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        if (binder.getTarget() instanceof FlightCreationalDTO) {
+            binder.addValidators(new FlightCreationalDTOValidator(flightFacade));
+        }
         
+        if (binder.getTarget() instanceof UpdateFlightDTO) {
+            binder.addValidators(new FlightUpdateDTOValidator(flightFacade));
+        }
     }
     
      /**
@@ -108,6 +116,9 @@ public class FlightController {
             for (ObjectError ge : bindingResult.getGlobalErrors()) {
                 log.trace("ObjectError: {}", ge);
             }
+            model.addAttribute("destinations", destinationFacade.getAllDestinations());
+            model.addAttribute("stewards", stewardFacade.getAllStewards());
+            model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
             return "flight/new";
         }
         Long id = flightFacade.createFlight(formBean);
@@ -153,16 +164,50 @@ public class FlightController {
     }
      
     /**
-     * Shows a list of Flights with the ability to add, delete or edit.
+     * Prepares edit form.
      *
-     * @param model display data
-     * @return jsp page
+     * @param id, model 
+     * @return JSP page to edit flight
      */
-//    @RequestMapping()
-//    public String list(Model model) {
-//        model.addAttribute("flights", flightFacade.getAllFlights());
-//        return "flight/list";
-//    }
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String editFlight(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+        UpdateFlightDTO flight = flightFacade.getUpdateFlightWithId(id);
+        if (flight == null) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Flight " + id + " cannot be updated");
+            return "redirect:" + uriBuilder.path("/flight/list").toUriString();
+        }
+        model.addAttribute("flight", flight);
+        model.addAttribute("destinations", destinationFacade.getAllDestinations());
+        model.addAttribute("stewards", stewardFacade.getAllStewards());
+        model.addAttribute("airplanes", airplaneFacade.getAllAirplanes());
+        return "flight/edit";
+    }
+    
+     /**
+     * Updates flight
+     *
+     * @param id, modelAttribute, bindingResult, model, redirectAttributes, uriBuilder
+     * @return JSP page
+     */
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String updateFlight(@PathVariable("id") long id, @Valid @ModelAttribute("flight") UpdateFlightDTO updatedFlight, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
+
+        try {
+            FlightDTO flight = flightFacade.getFlightWithId(id);
+            flightFacade.updateFlightArrival(updatedFlight);
+            flightFacade.updateFlightDeparture(updatedFlight);
+            flightFacade.updateFlightOrigin(updatedFlight);
+            flightFacade.updateFlightDestination(updatedFlight);
+            flightFacade.updateFlightAirplane(updatedFlight);
+            flightFacade.updateFlightStewards(updatedFlight);
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("alert_danger", "Flight " + id + " wasn't updated because of some unknow error");
+            return "redirect:" + uriBuilder.path("/flight/edit/{id}").buildAndExpand(id).encode().toUriString();
+        }
+        redirectAttributes.addFlashAttribute("alert_success", "Flight " + id + " was updated");
+        return "redirect:" + uriBuilder.path("/flight").toUriString();
+    }
     
     @ModelAttribute("locations")
     public Location[] locations() {

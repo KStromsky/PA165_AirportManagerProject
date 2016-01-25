@@ -11,9 +11,11 @@ import cz.muni.fi.airportapi.dto.FlightCreationalDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightsAirplaneDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightStewardsDTO;
 import java.util.List;
 
 /**
@@ -65,35 +67,49 @@ public interface FlightFacade {
      * 
      * @param update Flight with updated arrival time 
      */
-    public void updateFlightArrival(UpdateFlightArrivalDTO update);
+    public void updateFlightArrival(UpdateFlightDTO update);
     
     /**
      * Updates Flight.
      * 
      * @param update Flight with updated departure time 
      */
-    public void updateFlightDeparture(UpdateFlightDepartureDTO update);
+    public void updateFlightDeparture(UpdateFlightDTO update);
     
     /**
      * Updates Flight
      * 
      * @param update Flight with updated destination 
      */
-    public void updateFlightDestination(UpdateFlightDestinationDTO update);
+    public void updateFlightDestination(UpdateFlightDTO update);
     
     /**
      * Updates Flight
      * 
      * @param update Flight with updated origin destination 
      */
-    public void updateFlightOrigin(UpdateFlightOriginDTO update);
+    public void updateFlightOrigin(UpdateFlightDTO update);
     
     /**
      * Updates Flight
      * 
      * @param update Flight with updated airplane
      */
-    public void updateFlightAirplane(UpdateFlightsAirplaneDTO update);
+    public void updateFlightAirplane(UpdateFlightDTO update);
+    
+    /**
+     * Updates Flight
+     * 
+     * @param update Flight with updated stewards
+     */
+    public void updateFlightStewards(UpdateFlightDTO update);
+    
+    /**
+     * Gets Flight Update DTO with given id.
+     * @param id identificator
+     * @return 
+     */
+    public UpdateFlightDTO getUpdateFlightWithId(Long id);
     
     /**
      * Lists Flights by origin location.
@@ -109,5 +125,6 @@ public interface FlightFacade {
      * @param destination Destination to be sorted by.
      * @return list of flights flying to given destination
      */
-    public List<FlightDTO> getFlightsByDestination(DestinationDTO destination);   
+    public List<FlightDTO> getFlightsByDestination(DestinationDTO destination);
+    
 }

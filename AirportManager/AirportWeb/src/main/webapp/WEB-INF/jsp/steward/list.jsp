@@ -40,10 +40,10 @@
 
                 <div class="col-md-4">
                     <label class="col-md-12">&nbsp; </label>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <button class="btn btn-primary btn-block" type="submit">Filter</button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <a href="${pageContext.request.contextPath}/steward" class="btn btn-danger btn-block">Clear</a>
                     </div>
                 </div>

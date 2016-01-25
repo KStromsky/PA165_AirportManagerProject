@@ -2,21 +2,22 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<my:pagetemplate title="New Flight">
+<my:pagetemplate title="Edit Flight">
     <jsp:attribute name="body">
-        <form:form method="post" action="${pageContext.request.contextPath}/flight/create"
-                   modelAttribute="flightCreate" cssClass="form-horizontal">
+        <form:form method="post" action="${pageContext.request.contextPath}/flight/update/${flight.id}"
+                   modelAttribute="flight" cssClass="form-horizontal">
             <div class="form-group ${arrival_error?'has-error':''}">
                 <form:label path="arrival" cssClass="col-sm-1 control-label">Arrival</form:label>
-                <div id="arrival" class="col-sm-4">
+                <div class="col-sm-4">
                     <form:input type="date" pattern="yyyy-MM-dd" path="arrival" cssClass="form-control"/>
                     <form:errors path="arrival" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${departure_error?'has-error':''}">
                 <form:label path="departure" cssClass="col-sm-1 control-label">Departure</form:label>
-                <div id="departure" class="col-sm-4">
+                <div class="col-sm-4">
                     <form:input type="date" pattern="yyyy-MM-dd" path="departure" cssClass="form-control"/>
                     <form:errors path="departure" cssClass="help-block"/>
                 </div>
@@ -67,7 +68,7 @@
             </div>
             <div class="form-group col-sm-4">
                 <a href="${pageContext.request.contextPath}/flight" class="btn btn-danger">Back</a>
-                <button class="btn btn-primary" type="submit">Create flight</button>
+                <button class="btn btn-primary" type="submit">Edit flight</button>
             </div>
         </form:form>
     </jsp:attribute>

@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.muni.fi.airport.entity;
+package cz.muni.fi.airportapi.dto;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -21,17 +16,13 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 /**
- * Class representing the entity of Flight
- * 
+ *
  * @author Gabriela Podolnikova
  */
-@Entity
-public class Flight {
+public class UpdateFlightDTO {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-   
+    
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date arrival;
@@ -42,26 +33,18 @@ public class Flight {
     
     @NotNull
     @ManyToOne
-    private Destination origin;
+    private Long originId;
     
     @NotNull
     @ManyToOne
-    private Destination destination;
+    private Long destinationId;
     
     @NotNull
     @ManyToOne
-    private Airplane airplane;
+    private Long airplaneId;
     
-
     @ManyToMany
-    private List<Steward> stewards = new ArrayList<Steward>(); 
-    
-    public Flight() {       
-    }
-    
-    public Flight(Long id) {
-        this.id = id;
-    }
+    private List<Long> stewardsIds = new ArrayList<>();  
 
     /**
      * @return the arrival
@@ -92,56 +75,69 @@ public class Flight {
     }
 
     /**
-     * @return the origin
+     * @return the originId
      */
-    public Destination getOrigin() {
-        return origin;
+    public Long getOriginId() {
+        return originId;
     }
 
     /**
-     * @param origin the origin to set
+     * @param originId the originId to set
      */
-    public void setOrigin(Destination origin) {
-        this.origin = origin;
+    public void setOriginId(Long originId) {
+        this.originId = originId;
     }
 
     /**
-     * @return the destination
+     * @return the destinationId
      */
-    public Destination getDestination() {
-        return destination;
+    public Long getDestinationId() {
+        return destinationId;
     }
 
     /**
-     * @param destination the destination to set
+     * @param destinationId the destinationId to set
      */
-    public void setDestination(Destination destination) {
-        this.destination = destination;
+    public void setDestinationId(Long destinationId) {
+        this.destinationId = destinationId;
     }
 
     /**
-     * @return the airplane
+     * @return the airplaneId
      */
-    public Airplane getAirplane() {
-        return airplane;
+    public Long getAirplaneId() {
+        return airplaneId;
     }
 
     /**
-     * @param airplane the airplane to set
+     * @param airplaneId the airplaneId to set
      */
-    public void setAirplane(Airplane airplane) {
-        this.airplane = airplane;
+    public void setAirplaneId(Long airplaneId) {
+        this.airplaneId = airplaneId;
+    }
+
+    /**
+     * @return the stewardsIds
+     */
+    public List<Long> getStewardsIds() {
+        return stewardsIds;
+    }
+
+    /**
+     * @param stewardsIds the stewardsIds to set
+     */
+    public void setStewardsIds(List<Long> stewardsIds) {
+        this.stewardsIds = stewardsIds;
     }
     
-        
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.getArrival());
         hash = 67 * hash + Objects.hashCode(this.getDeparture());
-        hash = 67 * hash + Objects.hashCode(this.getOrigin());
-        hash = 67 * hash + Objects.hashCode(this.getDestination());
-        hash = 67 * hash + Objects.hashCode(this.getAirplane());
+        hash = 67 * hash + Objects.hashCode(this.getOriginId());
+        hash = 67 * hash + Objects.hashCode(this.getDestinationId());
+        hash = 67 * hash + Objects.hashCode(this.getAirplaneId());
         return hash;
     }
     
@@ -150,23 +146,23 @@ public class Flight {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Flight)) {
+        if (!(obj instanceof FlightCreationalDTO)) {
             return false;
         }
-        final Flight other = (Flight) obj;
+        final FlightCreationalDTO other = (FlightCreationalDTO) obj;
         if (!Objects.equals(this.getArrival(), other.getArrival())) {
             return false;
         }
         if (!Objects.equals(this.getDeparture(), other.getDeparture())) {
             return false;
         }
-        if (!Objects.equals(this.getDestination(), other.getDestination())) {
+        if (!Objects.equals(this.getDestinationId(), other.getDestinationId())) {
             return false;
         }
-        if (!Objects.equals(this.getOrigin(), other.getOrigin())) {
+        if (!Objects.equals(this.getOriginId(), other.getOriginId())) {
             return false;
         }
-        if (!Objects.equals(this.getAirplane(), other.getAirplane())) {
+        if (!Objects.equals(this.getAirplaneId(), other.getAirplaneId())) {
             return false;
         }
         return true;
@@ -180,31 +176,9 @@ public class Flight {
     }
 
     /**
-     * @return the stewards
-     */
-    public List<Steward> getStewards() {
-        return stewards;
-    }
-    
-    public void addSteward(Steward s) {
-        getStewards().add(s);
-    }
-    
-    public void removeSteward(Steward s) {
-        getStewards().remove(s);
-    }
-
-    /**
      * @param id the id to set
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * @param stewards the stewards to set
-     */
-    public void setStewards(List<Steward> stewards) {
-        this.stewards = stewards;
     }
 }

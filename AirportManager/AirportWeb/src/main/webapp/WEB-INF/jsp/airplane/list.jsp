@@ -50,10 +50,10 @@
                 
                 <div class="col-md-4">
                     <label class="col-md-12">&nbsp; </label>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <button class="btn btn-primary btn-block" type="submit">Filter</button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <a href="${pageContext.request.contextPath}/airplane" class="btn btn-danger btn-block">Clear</a>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         </td>
                         <td class="col-md-1">
                             <form method="post" action="${pageContext.request.contextPath}/airplane/delete/${airplane.id}">
-                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary">Delete</button>
+                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary btn-danger">Delete</button>
                             </form>
                         </td>
                         <td class="col-md-1">

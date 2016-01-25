@@ -44,7 +44,7 @@
                     </td>
                     <td class="col-md-1">
                         <form method="post" action="${pageContext.request.contextPath}/destination/delete/${destination.id}">
-                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="submit" class="btn btn-primary btn-danger">Delete</button>
                         </form>
                     </td>
                     <td class="col-md-1">

@@ -12,17 +12,21 @@ import cz.muni.fi.airport.entity.Steward;
 import cz.muni.fi.airportapi.dto.DestinationDTO;
 import cz.muni.fi.airportapi.dto.FlightCreationalDTO;
 import cz.muni.fi.airportapi.dto.FlightDTO;
+import cz.muni.fi.airportapi.dto.StewardDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightsAirplaneDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightArrivalDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDepartureDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightDestinationDTO;
 import cz.muni.fi.airportapi.dto.UpdateFlightOriginDTO;
+import cz.muni.fi.airportapi.dto.UpdateFlightStewardsDTO;
 import cz.muni.fi.airportapi.facade.FlightFacade;
 import cz.muni.fi.airportservicelayer.services.AirplaneService;
 import cz.muni.fi.airportservicelayer.services.BeanMappingService;
 import cz.muni.fi.airportservicelayer.services.DestinationService;
 import cz.muni.fi.airportservicelayer.services.FlightService;
 import cz.muni.fi.airportservicelayer.services.StewardService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,41 +94,63 @@ public class FlightFacadeImpl implements FlightFacade {
     }
 
     @Override
-    public void updateFlightArrival(UpdateFlightArrivalDTO update) {
+    public void updateFlightArrival(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
         f.setArrival(update.getArrival());
         flightService.update(f);
     }
 
     @Override
-    public void updateFlightDeparture(UpdateFlightDepartureDTO update) {
+    public void updateFlightDeparture(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
         f.setDeparture(update.getDeparture());
         flightService.update(f);
     }
 
     @Override
-    public void updateFlightDestination(UpdateFlightDestinationDTO update) {
+    public void updateFlightDestination(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
-        Destination d = destinationService.findById(update.getDestination().getId());
+        Destination d = destinationService.findById(update.getDestinationId());
         f.setDestination(d);
         flightService.update(f);
     }
 
     @Override
-    public void updateFlightOrigin(UpdateFlightOriginDTO update) {
+    public void updateFlightOrigin(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
-        Destination d = destinationService.findById(update.getOrigin().getId());
+        Destination d = destinationService.findById(update.getOriginId());
         f.setOrigin(d);
         flightService.update(f);
     }
 
     @Override
-    public void updateFlightAirplane(UpdateFlightsAirplaneDTO update) {
+    public void updateFlightAirplane(UpdateFlightDTO update) {
         Flight f = flightService.findById(update.getId());
-        Airplane a = airplaneService.findById(update.getAirplane().getId());
+        Airplane a = airplaneService.findById(update.getAirplaneId());
         f.setAirplane(a);
         flightService.update(f);
+    }
+    
+    @Override
+    public void updateFlightStewards(UpdateFlightDTO update) {
+        Flight f = flightService.findById(update.getId());
+        List<Long> stewardsIds = update.getStewardsIds();
+        List<Steward> stewards = new ArrayList<>();
+        for (Long id: stewardsIds) {
+            Steward s = stewardService.findById(id);
+            stewards.add(s);
+        }
+        f.setStewards(stewards);
+        flightService.update(f);
+    }
+    
+    @Override
+    public UpdateFlightDTO getUpdateFlightWithId(Long id) {
+        Flight flight = flightService.findById(id);
+        if (flight == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(flight, UpdateFlightDTO.class);
     }
 
     @Override
