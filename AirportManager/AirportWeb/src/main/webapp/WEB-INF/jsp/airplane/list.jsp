@@ -63,19 +63,19 @@
             <tbody>
                 <c:forEach items="${airplanes}" var="airplane">
                     <tr>
-                        <td class="col-md-2"><c:out value="${airplane.name}"/></td>
+                        <td class="col-md-3"><c:out value="${airplane.name}"/></td>
                         <td class="col-md-2"><c:out value="${airplane.capacity}"/></td>
-                        <td class="col-md-2"><c:out value="${airplane.type}"/></td>
-                        <td class="col-md-1"><c:out value="${airplaneFlights.get(airplane.id).size()}"/></td>
-                        <td class="col-md-1">
+                        <td class="col-md-3"><c:out value="${airplane.type}"/></td>
+                        <td class="col-md-2"><c:out value="${airplaneFlights.get(airplane.id).size()}"/></td>
+                        <td class="col-md-3">
                             <a href="${pageContext.request.contextPath}/airplane/detail/${airplane.id}" class="btn btn-info btn-block">View</a>
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-md-2">
                             <form method="post" action="${pageContext.request.contextPath}/airplane/delete/${airplane.id}">
-                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary btn-danger">Delete</button>
+                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary btn-danger btn-block">Delete</button>
                             </form>
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-md-2">
                         <a href="${pageContext.request.contextPath}/airplane/edit/${airplane.id}" class="btn btn-primary">Edit</a>
                     </td>
                     </tr>

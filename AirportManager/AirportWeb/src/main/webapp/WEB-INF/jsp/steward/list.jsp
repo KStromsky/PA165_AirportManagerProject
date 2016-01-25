@@ -67,16 +67,16 @@
                 <td class="col-md-2"><c:out value="${steward.surname}"/></td>
                 <td class="col-md-2"><c:out value="${steward.username}"/></td>
                 <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
-                <td class="col-md-1">
+                <td class="col-md-4">
                     <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
                 </td>
-                <td class="col-md-1">
-                    <a href="${pageContext.request.contextPath}/steward/edit/${steward.id}" class="btn btn-primary btn-block">Edit</a>
-                </td>
-                <td class="col-md-1">
+                <td class="col-md-2">
                     <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">
-                        <button type="submit" ${stewardsFlights.get(steward.id).size() > 0 ? "disabled" : ""} class="btn btn-primary">Delete</button>
+                        <button type="submit" ${stewardsFlights.get(steward.id).size() > 0 ? "disabled" : ""} class="btn btn-primary btn-danger btn-block">Delete</button>
                     </form>
+                </td>
+                <td class="col-md-2">
+                    <a href="${pageContext.request.contextPath}/steward/edit/${steward.id}" class="btn btn-primary btn-block">Edit</a>
                 </td>
             </tr>
         </c:forEach>

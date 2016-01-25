@@ -38,16 +38,16 @@
             <tbody>
             <c:forEach items="${destinations}" var="destination">
                 <tr>
-                    <td class="col-md-2"><c:out value="${destination.location}"/></td>
-                    <td class="col-md-1">
+                    <td class="col-md-4"><c:out value="${destination.location}"/></td>
+                    <td class="col-md-4">
                         <a href="${pageContext.request.contextPath}/destination/detail/${destination.id}" class="btn btn-info btn-block">View</a>
                     </td>
-                    <td class="col-md-1">
+                    <td class="col-md-2">
                         <form method="post" action="${pageContext.request.contextPath}/destination/delete/${destination.id}">
-                            <button type="submit" class="btn btn-primary btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-primary btn-danger btn-block">Delete</button>
                         </form>
                     </td>
-                    <td class="col-md-1">
+                    <td class="col-md-2">
                         <a href="${pageContext.request.contextPath}/destination/edit/${destination.id}" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
