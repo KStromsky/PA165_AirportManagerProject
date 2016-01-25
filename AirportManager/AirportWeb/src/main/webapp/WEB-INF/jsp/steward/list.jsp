@@ -49,39 +49,41 @@
 </div>
 <hr>
 
-<table class="table table-hover table-condensed fixed">
-    <thead>
-        <tr>
-            <th>PersonalIdentificator</th>
-            <th>First Name</th>
-            <th>Surname</th>
-            <th>Username</th>
-            <th>Flights Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach items="${stewards}" var="steward">
+<div class="table-responsive">
+    <table class="table table-hover table-condensed fixed">
+        <thead>
             <tr>
-                <td class="col-md-2"><c:out value="${steward.personalIdentificator}"/></td>
-                <td class="col-md-2"><c:out value="${steward.firstname}"/></td>
-                <td class="col-md-2"><c:out value="${steward.surname}"/></td>
-                <td class="col-md-2"><c:out value="${steward.username}"/></td>
-                <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
-                <td class="col-md-4">
-                    <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
-                </td>
-                <td class="col-md-2">
-                    <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">
-                        <button type="submit" ${stewardsFlights.get(steward.id).size() > 0 ? "disabled" : ""} class="btn btn-primary btn-danger btn-block">Delete</button>
-                    </form>
-                </td>
-                <td class="col-md-2">
-                    <a href="${pageContext.request.contextPath}/steward/edit/${steward.id}" class="btn btn-primary btn-block">Edit</a>
-                </td>
+                <th>PersonalIdentificator</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Username</th>
+                <th>Flights Count</th>
             </tr>
-        </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <c:forEach items="${stewards}" var="steward">
+                <tr>
+                    <td class="col-md-2"><c:out value="${steward.personalIdentificator}"/></td>
+                    <td class="col-md-2"><c:out value="${steward.firstname}"/></td>
+                    <td class="col-md-2"><c:out value="${steward.surname}"/></td>
+                    <td class="col-md-2"><c:out value="${steward.username}"/></td>
+                    <td class="col-md-2"><c:out value="${stewardsFlights.get(steward.id).size()}"/></td>
+                    <td class="col-md-4">
+                        <a href="${pageContext.request.contextPath}/steward/detail/${steward.id}" class="btn btn-info btn-block">View</a>
+                    </td>
+                    <td class="col-md-2">
+                        <form method="post" action="${pageContext.request.contextPath}/steward/delete/${steward.id}">
+                            <button type="submit" ${stewardsFlights.get(steward.id).size() > 0 ? "disabled" : ""} class="btn btn-primary btn-danger btn-block">Delete</button>
+                        </form>
+                    </td>
+                    <td class="col-md-2">
+                        <a href="${pageContext.request.contextPath}/steward/edit/${steward.id}" class="btn btn-primary btn-block">Edit</a>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+</div>
 
 </jsp:attribute>
 </my:pagetemplate>
