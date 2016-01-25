@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <my:pagetemplate title="Edit Flight">
     <jsp:attribute name="body">
         <form:form method="post" action="${pageContext.request.contextPath}/flight/update/${flight.id}"

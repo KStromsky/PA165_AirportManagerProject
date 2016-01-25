@@ -3,20 +3,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <my:pagetemplate title="New Flight">
     <jsp:attribute name="body">
         <form:form method="post" action="${pageContext.request.contextPath}/flight/create"
                    modelAttribute="flightCreate" cssClass="form-horizontal">
-            <div class="form-group ${arrival_error?'has-error':''}">
+             <div class="form-group ${arrival_error?'has-error':''}">
                 <form:label path="arrival" cssClass="col-sm-1 control-label">Arrival</form:label>
-                <div id="arrival" class="col-sm-4">
+                <div class="col-sm-4">
                     <form:input type="date" pattern="yyyy-MM-dd" path="arrival" cssClass="form-control"/>
                     <form:errors path="arrival" cssClass="help-block"/>
                 </div>
             </div>
             <div class="form-group ${departure_error?'has-error':''}">
                 <form:label path="departure" cssClass="col-sm-1 control-label">Departure</form:label>
-                <div id="departure" class="col-sm-4">
+                <div class="col-sm-4">
                     <form:input type="date" pattern="yyyy-MM-dd" path="departure" cssClass="form-control"/>
                     <form:errors path="departure" cssClass="help-block"/>
                 </div>
