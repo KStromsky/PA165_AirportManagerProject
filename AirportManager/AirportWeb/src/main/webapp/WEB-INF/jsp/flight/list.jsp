@@ -50,40 +50,44 @@
         </form>
     </div>
     <hr>
-    <table class="table table-hover table-condensed fixed">
-        <thead>
-            <tr>
-                <th>Arrival</th>
-                <th>Departure</th>
-                <th>Origin</th>
-                <th>Destination</th>
-                <th>Airplane</th>
-                <th>Stewards</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach items="${flights}" var="flight">
+
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed fixed">
+            <thead>
                 <tr>
-                    <td class="col-md-2"><c:out value="${flight.arrival}"/></td>
-                    <td class="col-md-3"><c:out value="${flight.departure}"/></td>
-                    <td class="col-md-3"><c:out value="${flight.origin.location}"/></td>
-                    <td class="col-md-3"><c:out value="${flight.destination.location}"/></td>
-                    <td class="col-md-3"><c:out value="${flight.airplane.name}"/></td>
-                    <td class="col-md-3"><c:out value="${flight.stewards.size()}"/></td>
-                    <td class="col-md-1">
-                        <a href="${pageContext.request.contextPath}/flight/detail/${flight.id}" class="btn btn-info btn-block">View</a>
-                    </td>
-                    <td class="col-md-1">
-                        <form method="post" action="${pageContext.request.contextPath}/flight/delete/${flight.id}">
-                            <button type="submit" class="btn btn-primary btn-danger">Delete</button>
-                        </form>
-                    </td>
-                    <td class="col-md-1">
-                        <a href="${pageContext.request.contextPath}/flight/edit/${flight.id}" class="btn btn-primary">Edit</button>
-                    </td>
+                    <th>Arrival</th>
+                    <th>Departure</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Airplane</th>
+                    <th>Stewards</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:forEach items="${flights}" var="flight">
+                    <tr>
+                        <td class="col-md-2"><fmt:formatDate pattern="yyyy-MM-dd" value="${flight.arrival}"/></td>
+                        <td class="col-md-2"><fmt:formatDate pattern="yyyy-MM-dd" value="${flight.departure}"/></td>
+                        <td class="col-md-2"><c:out value="${flight.origin.location}"/></td>
+                        <td class="col-md-2"><c:out value="${flight.destination.location}"/></td>
+                        <td class="col-md-2"><c:out value="${flight.airplane.name}"/></td>
+                        <td class="col-md-1"><c:out value="${flight.stewards.size()}"/></td>
+                        <td class="col-md-4">
+                            <a href="${pageContext.request.contextPath}/flight/detail/${flight.id}" class="btn btn-info btn-block">View</a>
+                        </td>
+                        <td class="col-md-2">
+                            <form method="post" action="${pageContext.request.contextPath}/flight/delete/${flight.id}">
+                                <button type="submit" class="btn btn-primary btn-danger btn-block">Delete</button>
+                            </form>
+                        </td>
+                        <td class="col-md-2">
+                            <a href="${pageContext.request.contextPath}/flight/edit/${flight.id}" class="btn btn-primary">Edit</button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
 </jsp:attribute>
 </my:pagetemplate>

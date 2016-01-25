@@ -18,13 +18,13 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Implementation of Data Access Object for entity Steward
- * 
+ *
  * @author Sebastian Kupka
  */
 @Transactional
 @Repository
 public class StewardDaoImpl implements StewardDao {
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -42,7 +42,7 @@ public class StewardDaoImpl implements StewardDao {
     public void remove(Steward steward) throws IllegalArgumentException {
         em.remove(findById(steward.getId()));
     }
-    
+
     @Override
     public void remove(Long id) throws IllegalArgumentException {
         em.remove(findById(id));
@@ -56,8 +56,8 @@ public class StewardDaoImpl implements StewardDao {
     @Override
     public Steward findByIdentificator(String identificator) {
         try {
-        return em.createQuery("SELECT s FROM Steward s WHERE s.personalIdentificator like :pi ",
-				Steward.class).setParameter("pi", "%" + identificator + "%").getSingleResult();
+            return em.createQuery("SELECT s FROM Steward s WHERE s.personalIdentificator like :pi ",
+                    Steward.class).setParameter("pi", "%" + identificator + "%").getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -70,12 +70,22 @@ public class StewardDaoImpl implements StewardDao {
 
     @Override
     public List<Steward> findByName(String name, String surname) {
-        return em.createQuery("SELECT s FROM Steward s WHERE s.firstname = :name AND s.surname = :surname", Steward.class)
-                .setParameter("name", name)
-                .setParameter("surname", surname)
+        if (name == null) {
+            name = new String();
+        } else {
+            name = name.toLowerCase();
+        }
+        if (surname == null) {
+            surname = new String();
+        } else {
+            surname = surname.toLowerCase();
+        }
+        return em.createQuery("SELECT s FROM Steward s WHERE Lower(s.firstname) LIKE :name AND Lower(s.surname) LIKE :surname", Steward.class)
+                .setParameter("name", "%" + name + "%")
+                .setParameter("surname", "%" + surname + "%")
                 .getResultList();
     }
-    
+
     @Override
     public List<Steward> findAvailableStewards(Date fromDate, Date toDate) {
         return em.createQuery("SELECT s FROM Steward s WHERE s NOT IN "
@@ -94,7 +104,7 @@ public class StewardDaoImpl implements StewardDao {
                 + " ORDER BY f.arrival DESC", Flight.class).setParameter("stewardId", steward.getId())
                 .getResultList();
         return flights;
-    }  
+    }
 
     @Override
     public Steward findByUsername(String username) {

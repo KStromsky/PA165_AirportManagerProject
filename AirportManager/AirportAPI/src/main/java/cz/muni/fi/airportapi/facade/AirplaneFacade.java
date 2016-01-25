@@ -24,6 +24,7 @@ public interface AirplaneFacade {
     public void removeAirplane(Long id);
     public void updateAirplaneCapacity(UpdateAirplaneCapacityDTO update);
     public List<AirplaneDTO> getAvailableAirplanes(Date from, Date to);
+    public List<AirplaneDTO> getAvailableAirplanes(String subname, String type, int capacity);
     public List<FlightDTO> getAirplaneFlights(Long id);
     public List<AirplaneDTO> getSpecificAirplanes(Date from, Date to, int capacity, String location);
 }

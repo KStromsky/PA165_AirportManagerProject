@@ -65,6 +65,16 @@ public interface AirplaneService {
     void update(Airplane airplane);
     
     /**
+     * Finds airplanes which names contains given string and their capacities are higher than given capacity.
+     * 
+     * @param subname part of the name
+     * @param type type of airplane
+     * @param capacity minimal capacity
+     * @return available airplanes in given range of dates
+     */
+    List<Airplane> findAvailableAirplanes(String subname, String type, int capacity);
+    
+    /**
      * Finds airplanes which are available in given range of dates.
      * 
      * @param fromDate initial date of range

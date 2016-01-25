@@ -22,32 +22,22 @@
                 </a>
             </div>
             <div class="col-md-12">
-                    <label> </label>
-                </div>
+                <label> </label>
+            </div>
             <form action="${pageContext.request.contextPath}/airplane">
-
-                <div class="col-md-2">
-                    <label>Available From</label>
-                    <input class="form-control" type="date" name="dateFromStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateFromStr}">
+                <div class="col-md-3">
+                    <label>Name</label>
+                    <input class="form-control" name="name"  value="${param.name}">
                 </div>
-                <div class="col-md-2">
-                    <label>Available To</label>
-                    <input class="form-control" type="date" name="dateToStr" pattern="\d{4}-\d{2}-\d{2}" title="Date format yyyy-MM-dd" value="${param.dateToStr}">
+                <div class="col-md-3">
+                    <label>Type</label>
+                    <input class="form-control" name="type"  value="${param.type}">
                 </div>
                 <div class="col-md-1">
                     <label>Capacity</label>
                     <input class="form-control" type="number" min="0" max="100000" name="capacity"  value="${param.capacity}">
                 </div>
-                <div class="col-md-3">
-                    <label>Destination</label>
-                    <select class="form-control" name="destination">
-                        <option value="" selected>None</option>
-                        <c:forEach items="${destinations}" var="destination">
-                            <option value="${destination.location}" ${param.destination == destination.location ? 'selected' : ''}>${destination.location}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                
+
                 <div class="col-md-4">
                     <label class="col-md-12">&nbsp; </label>
                     <div class="col-md-4">
@@ -61,37 +51,39 @@
         </div>
         <hr>
 
-        <table class="table table-hover table-condensed fixed">
-            <thead>
-                <tr>
-                    <th>Airplane name</th>
-                    <th>Capacity</th>
-                    <th>Airplane type</th>
-                    <th>Flights</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${airplanes}" var="airplane">
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed fixed">
+                <thead>
                     <tr>
-                        <td class="col-md-2"><c:out value="${airplane.name}"/></td>
-                        <td class="col-md-2"><c:out value="${airplane.capacity}"/></td>
-                        <td class="col-md-2"><c:out value="${airplane.type}"/></td>
-                        <td class="col-md-1"><c:out value="${airplaneFlights.get(airplane.id).size()}"/></td>
-                        <td class="col-md-1">
-                            <a href="${pageContext.request.contextPath}/airplane/detail/${airplane.id}" class="btn btn-info btn-block">View</a>
-                        </td>
-                        <td class="col-md-1">
-                            <form method="post" action="${pageContext.request.contextPath}/airplane/delete/${airplane.id}">
-                                <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary btn-danger">Delete</button>
-                            </form>
-                        </td>
-                        <td class="col-md-1">
-                        <a href="${pageContext.request.contextPath}/airplane/edit/${airplane.id}" class="btn btn-primary">Edit</a>
-                    </td>
+                        <th>Airplane name</th>
+                        <th>Capacity</th>
+                        <th>Airplane type</th>
+                        <th>Flights</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <c:forEach items="${airplanes}" var="airplane">
+                        <tr>
+                            <td class="col-md-3"><c:out value="${airplane.name}"/></td>
+                            <td class="col-md-2"><c:out value="${airplane.capacity}"/></td>
+                            <td class="col-md-3"><c:out value="${airplane.type}"/></td>
+                            <td class="col-md-2"><c:out value="${airplaneFlights.get(airplane.id).size()}"/></td>
+                            <td class="col-md-3">
+                                <a href="${pageContext.request.contextPath}/airplane/detail/${airplane.id}" class="btn btn-info btn-block">View</a>
+                            </td>
+                            <td class="col-md-2">
+                                <form method="post" action="${pageContext.request.contextPath}/airplane/delete/${airplane.id}">
+                                    <button type="submit" ${!airplaneFlights.get(airplane.id).isEmpty() ? 'disabled' : ''} class="btn btn-primary btn-danger btn-block">Delete</button>
+                                </form>
+                            </td>
+                            <td class="col-md-2">
+                                <a href="${pageContext.request.contextPath}/airplane/edit/${airplane.id}" class="btn btn-primary">Edit</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
 
     </jsp:attribute>
 </my:pagetemplate>

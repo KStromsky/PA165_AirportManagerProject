@@ -7,40 +7,44 @@ import javax.swing.text.View;
 
 public class UserDTO
 {
-    private Long id;
-    
-    private String passwordHash;
-    
-    private String userName;
+    protected Long id;
+    protected String username;
+    protected boolean admin;
 
     public UserDTO(){
         
     }
     
+    /**
+     * Gets the entity Database ID
+     * @return identificator
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the entity Database ID
+     * @param id identificator
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
-   // @JsonIgnore
-    public String getPasswordHash() {
-        return passwordHash;
+   public String getUsername() {
+        return username;
     }
 
-  //  @JsonProperty
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserName() {
-        return userName;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
 
@@ -48,7 +52,7 @@ public class UserDTO
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
     }
 
@@ -61,10 +65,10 @@ public class UserDTO
         if (getClass() != obj.getClass())
             return false;
         UserDTO other = (UserDTO) obj;
-        if (userName == null) {
-            if (other.userName != null)
+        if (username == null) {
+            if (other.username != null)
                 return false;
-        } else if (!userName.equals(other.userName))
+        } else if (!username.equals(other.username))
             return false;
         return true;
     }
@@ -73,8 +77,8 @@ public class UserDTO
     public String toString() {
         return "UserDTO{" +
                 "id=" + id +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", userName='" + userName + 
+                ", admin='" + admin + '\'' +
+                ", username='" + username + 
                 '}';
     }
 }

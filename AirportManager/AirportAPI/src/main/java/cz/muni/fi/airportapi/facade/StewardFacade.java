@@ -40,6 +40,15 @@ public interface StewardFacade {
     public StewardDTO getStewardWithPersonalIdentificator(String personalIdentificator);
     
     /**
+     * Gets Stewards DTO with given partail name and personal identificator.
+     * @param personalIdentificator part of personal identificator
+     * @param name part of first name
+     * @param surname part of second name
+     * @return 
+     */
+    public List<StewardDTO> getRelevantStewards(String personalIdentificator, String name, String surname);
+    
+    /**
      * Lists all Steward DTOs
      * @return 
      */

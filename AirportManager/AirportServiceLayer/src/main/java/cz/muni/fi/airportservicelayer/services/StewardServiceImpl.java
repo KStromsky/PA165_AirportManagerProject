@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StewardServiceImpl implements StewardService {
-    
+
     @Inject
     private StewardDao stewardDao;
 
@@ -135,10 +135,10 @@ public class StewardServiceImpl implements StewardService {
 
     @Override
     public void updateSteward(Steward update, String password) {
-        if (update == null ||update.getId() == null) {
+        if (update == null || update.getId() == null) {
             return;
         }
-        
+
         if (password != null) {
             update.setPwHash(createHash(password));
         }
@@ -152,7 +152,7 @@ public class StewardServiceImpl implements StewardService {
             throw new BasicDataAccessException(ex);
         }
     }
-    
+
     @Override
     public List<Flight> findStewardFlights(Steward steward) {
         if (steward == null || steward.getId() == null) {
@@ -168,7 +168,34 @@ public class StewardServiceImpl implements StewardService {
             throw new BasicDataAccessException(ex);
         }
     }
-    
+
+    @Override
+    public List<Steward> getRelevantStewards(String personalIdentificator, String name, String surname) {
+
+        if (personalIdentificator == null) {
+            personalIdentificator = new String();
+        } else {
+            personalIdentificator = personalIdentificator.toUpperCase();
+        }
+        try {
+            List<Steward> all = stewardDao.findByName(name, surname);
+
+            List<Steward> filtered = new ArrayList<Steward>();
+            for (Steward steward : all) {
+                if (steward.getPersonalIdentificator().contains(personalIdentificator)) {
+                    filtered.add(steward);
+                }
+            }
+            return filtered;
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            throw new IllegalArgumentDataException(ex);
+        } catch (ValidationException ex) {
+            throw new ValidationDataException(ex);
+        } catch (Exception ex) {
+            throw new BasicDataAccessException(ex);
+        }
+    }
+
     @Override
     public List<Steward> findAvailableStewards(Date fromDate, Date toDate) {
         if (fromDate == null) {
@@ -199,7 +226,7 @@ public class StewardServiceImpl implements StewardService {
             if (fromDate == null) {
                 fromDate = toDate;
             }
-            
+
             if (toDate == null) {
                 toDate = fromDate;
             }
@@ -213,7 +240,7 @@ public class StewardServiceImpl implements StewardService {
             return availableStewards;
         }
     }
-    
+
     @Override
     public List<Steward> findAvailableStewardsAtLocation(long locationId) {
         return this.findSpecificStewards(null, null, locationId);
@@ -221,7 +248,7 @@ public class StewardServiceImpl implements StewardService {
 
     private List<Steward> findSpecificStewards(List<Steward> availableStewards, long locationId) {
         List<Steward> specificAirplanes = new ArrayList<>();
-        for(Steward steward : availableStewards) {
+        for (Steward steward : availableStewards) {
             Destination dest = this.findStewardLocation(steward);
             if (dest != null && new Long(locationId).equals(dest.getId())) {
                 specificAirplanes.add(steward);
@@ -242,7 +269,7 @@ public class StewardServiceImpl implements StewardService {
 
     @Override
     public Steward findByUsername(String username) {
-        if(username == null) {
+        if (username == null) {
             throw new IllegalArgumentException("username is null");
         }
         try {
@@ -258,16 +285,16 @@ public class StewardServiceImpl implements StewardService {
 
     @Override
     public boolean authentication(Steward steward, String pw) {
-        if(steward == null) {
+        if (steward == null) {
             return false;
-        } 
+        }
         try {
             return validatePassword(pw, steward.getPwHash());
         } catch (Exception ex) {
             throw new ValidationDataException(ex);
         }
     }
-      
+
     //see  https://crackstation.net/hashing-security.htm#javasourcecode
     private static String createHash(String password) {
         final int SALT_BYTE_SIZE = 24;

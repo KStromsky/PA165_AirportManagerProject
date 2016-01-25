@@ -141,7 +141,7 @@ public class StewardController {
         }
         Long id = 0L;
         try {
-//            if (stewardFacade.getStewardWithPersonalIdentificator(formBean.getPersonalIdentificator()) != null) {
+//            if (stewardFacade.getRelevantStewards(formBean.getPersonalIdentificator()) != null) {
 //                bindingResult.addError(new FieldError("stewardCreate", "personalIdentificator",
 //                        formBean.getPersonalIdentificator(), false, 
 //                        new String[]{"StewardCreationalDTOValidator.invalid.personalIdetificator"}, 
@@ -270,35 +270,31 @@ public class StewardController {
      * Shows a list of stewards which are available at given location at given
      * time.
      *
-     * @param locationId id of lacation, for which we want to find stewards
-     * @param dateFromStr available from date
-     * @param dateToStr available to date
+     * @param ident id of lacation, for which we want to find stewards
+     * @param name available from date
+     * @param surname available to date
      * @param model display data
      * @return jsp page
      */
     @RequestMapping()
-    public String list(@RequestParam(value = "destination", required = false) Long locationId,
-            @RequestParam(value = "dateFromStr", required = false) String dateFromStr,
-            @RequestParam(value = "dateToStr", required = false) String dateToStr,
+    public String list(@RequestParam(value = "ident", required = false) String ident,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "surname", required = false) String surname,
             @RequestParam(value = "invalid", required = false, defaultValue = "false") boolean invalid,
             Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) throws IllegalAccessException {
 
-        Date dateTo = null;
-        Date dateFrom = null;
-        
-
         StringBuilder sb = new StringBuilder("redirect:" + uriBuilder.path("/steward").toUriString());
         sb.append("?");
-        if (locationId != null) {
-            sb.append("destination=" + locationId);
+        if (ident != null) {
+            sb.append("ident=" + ident);
             sb.append("&");
         }
-        if (dateFromStr != null && !dateFromStr.isEmpty()) {
-            sb.append("dateFromStr=" + dateFromStr);
+        if (name != null && !name.isEmpty()) {
+            sb.append("name=" + name);
             sb.append("&");
         }
-        if (dateToStr != null && !dateToStr.isEmpty()) {
-            sb.append("dateToStr=" + dateToStr);
+        if (surname != null && !surname.isEmpty()) {
+            sb.append("surname=" + surname);
             sb.append("&");
         }
         sb.append("invalid=true");
@@ -306,38 +302,8 @@ public class StewardController {
         String returnURI = sb.toString();
 
         if (!invalid) {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            formatter.setLenient(false);
-            if (dateFromStr != null && !dateFromStr.isEmpty()) {
-                try {
-                    dateFrom = formatter.parse(dateFromStr);
-                } catch (ParseException ex) {
-                    log.debug("Parsing error - ignoring From Date", ex);
-                    redirectAttributes.addFlashAttribute("alert_danger", "Available From is not a valid Date!");
-                    return returnURI;
-                }
-            }
-            if (dateToStr != null && !dateToStr.isEmpty()) {
-                try {
-                    dateTo = formatter.parse(dateToStr);
-                } catch (ParseException ex) {
-                    log.debug("Parsing error - ignoring To Date", ex);
-                    redirectAttributes.addFlashAttribute("alert_danger", "Available To is not a valid Date!");
-                    return returnURI;
-                }
-            }
-
-            if (dateFrom != null && dateTo != null && dateFrom.compareTo(dateTo) > 0) {
-                redirectAttributes.addFlashAttribute("alert_danger", "Available From is later than Available To");
-                return returnURI;
-            }
-
             try {
-                if (locationId != null && destinationFacade.getDestinationWithId(locationId) == null) {
-                    locationId = null;
-                }
-
-                List<StewardDTO> stewards = stewardFacade.findSpecificStewards(dateFrom, dateTo, locationId);
+                List<StewardDTO> stewards = stewardFacade.getRelevantStewards(ident, name, surname);
                 model.addAttribute("stewards", stewards);
                 Map<Long, List<FlightDTO>> stewardsFlights = new HashMap<>();
                 for (StewardDTO steward : stewards) {

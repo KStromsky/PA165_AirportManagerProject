@@ -162,4 +162,16 @@ public class FlightFacadeImpl implements FlightFacade {
     public List<FlightDTO> getFlightsByDestination(DestinationDTO destination) {
         return beanMappingservice.mapTo(flightService.listByDestination(destination.getId()), FlightDTO.class);
     }
+
+    @Override
+    public boolean verifyAirplane(FlightDTO flight) {
+        Flight entity = beanMappingservice.mapTo(flight, Flight.class);
+        return flightService.verifyAirplane(entity);
+    }
+
+    @Override
+    public boolean verifyStewards(FlightDTO flight) {
+        Flight entity = beanMappingservice.mapTo(flight, Flight.class);
+        return flightService.verifyStewards(entity);
+    }
 }

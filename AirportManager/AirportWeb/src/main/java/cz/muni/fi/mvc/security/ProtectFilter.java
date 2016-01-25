@@ -30,7 +30,7 @@ public class ProtectFilter implements Filter {
         Object auth = request.getSession().getAttribute("authenticated");
         if (auth != null && auth instanceof StewardDTO) {
             StewardDTO steward = (StewardDTO) auth;
-            if (!steward.isIsAdmin() 
+            if (!steward.isAdmin() 
                     && request.getRequestURL().toString().matches(".*new.*|.*create.*|.*update.*|.*edit.*")
                     && !request.getRequestURL().toString().matches(".*/steward/.*/" + steward.getId().toString())) {
                 log.warn("requires admin to access");
