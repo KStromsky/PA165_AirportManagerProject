@@ -68,5 +68,14 @@ public class DestinationFacadeImpl implements DestinationFacade{
         oldDestination.setLocation(update.getLocation());
         destinationService.update(oldDestination);
     }
+
+    @Override
+    public UpdateDestinationLocationDTO getUpdateDestinationLocationWithId(Long id) {
+        Destination destination = destinationService.findById(id);
+        if (destination == null) {
+            return null;
+        }
+        return beanMappingservice.mapTo(destination, UpdateDestinationLocationDTO.class);
+    }
     
 }

@@ -25,6 +25,14 @@ public interface DestinationFacade {
     public DestinationDTO getDestinationWithId(Long id);
     
     /**
+     * Gets Update Destination Location DTO with given id.
+     * 
+     * @param id identificator of destination
+     * @return 
+     */
+    public UpdateDestinationLocationDTO getUpdateDestinationLocationWithId(Long id);
+    
+    /**
      * Gets Destination DTO with location
      * 
      * @param location location of destination

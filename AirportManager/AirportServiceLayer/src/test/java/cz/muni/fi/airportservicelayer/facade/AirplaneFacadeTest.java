@@ -117,7 +117,7 @@ public class AirplaneFacadeTest extends AbstractTransactionalTestNGSpringContext
     public void testUpdateAirplaneCapacity() {
         Long id = airplaneFacade.createAirplane(creationalAirplaneDTO1);
         UpdateAirplaneCapacityDTO update = new UpdateAirplaneCapacityDTO();
-        update.setAirplaneId(id);
+        update.setId(id);
         update.setCapacity(120);
         airplaneFacade.updateAirplaneCapacity(update);
         assert 120 == airplaneFacade.getAirplaneWithId(id).getCapacity();

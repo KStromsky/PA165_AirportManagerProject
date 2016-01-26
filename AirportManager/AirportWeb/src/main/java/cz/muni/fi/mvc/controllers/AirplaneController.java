@@ -193,7 +193,7 @@ public class AirplaneController {
 
     @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
     public String editAirplane(@PathVariable("id") long id, Model model) {
-        model.addAttribute("airplane", airplaneFacade.getAirplaneWithId(id));
+        model.addAttribute("airplane", airplaneFacade.getUpdateAirplaneCapacityWithId(id));
         return "airplane/edit";
     }
     
@@ -204,20 +204,25 @@ public class AirplaneController {
      * @return JSP page
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String updateAirplane(@PathVariable("id") long id, @Valid @ModelAttribute("airplane") AirplaneDTO updatedAirplane, BindingResult bindingResult,
+    public String updateAirplane(@PathVariable("id") long id, @Valid @ModelAttribute("airplane") UpdateAirplaneCapacityDTO updatedAirplane, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
         
+        if (bindingResult.hasErrors()) {
+            for (FieldError fe : bindingResult.getFieldErrors()) {
+                model.addAttribute(fe.getField() + "_error", true);
+                log.trace("FieldError: {}", fe);
+            }
+            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                log.trace("ObjectError: {}", ge);
+            }
+            return "airplane/edit";
+        }
         if (updatedAirplane.getCapacity()==0){
             redirectAttributes.addFlashAttribute("alert_danger", "Capacity of airplane is empty");
             return "redirect:" + uriBuilder.path("/airplane/edit/{id}").buildAndExpand(id).encode().toUriString();
         }
-        
-        
-        AirplaneDTO airplane = airplaneFacade.getAirplaneWithId(id);
-        UpdateAirplaneCapacityDTO airplane2 = new UpdateAirplaneCapacityDTO();
-        airplane2.setAirplaneId(airplane.getId());
-        airplane2.setCapacity(updatedAirplane.getCapacity());
-        airplaneFacade.updateAirplaneCapacity(airplane2);
+
+        airplaneFacade.updateAirplaneCapacity(updatedAirplane);
 
         redirectAttributes.addFlashAttribute("alert_success", "Airplane " + id + " was updated");
         return "redirect:" + uriBuilder.path("/airplane").toUriString();

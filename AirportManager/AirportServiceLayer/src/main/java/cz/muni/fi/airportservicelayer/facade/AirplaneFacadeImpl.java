@@ -63,7 +63,7 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
 
     @Override
     public void updateAirplaneCapacity(UpdateAirplaneCapacityDTO update) {
-        Airplane a = airplaneService.findById(update.getAirplaneId());
+        Airplane a = airplaneService.findById(update.getId());
         a.setCapacity(update.getCapacity());
         airplaneService.update(a);
     }
@@ -88,6 +88,11 @@ public class AirplaneFacadeImpl implements AirplaneFacade {
     public List<AirplaneDTO> getSpecificAirplanes(Date from, Date to, int capacity, String location) {
         return beanMappingservice.mapTo(airplaneService.findSpecificAirplanes(from, to, capacity, location)
                 , AirplaneDTO.class);
+    }
+
+    @Override
+    public UpdateAirplaneCapacityDTO getUpdateAirplaneCapacityWithId(Long id) {
+        return beanMappingservice.mapTo(airplaneService.findById(id), UpdateAirplaneCapacityDTO.class);
     }
        
 }

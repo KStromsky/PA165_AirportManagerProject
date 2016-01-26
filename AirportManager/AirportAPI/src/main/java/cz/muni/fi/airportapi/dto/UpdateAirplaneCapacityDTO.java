@@ -14,17 +14,17 @@ import javax.validation.constraints.Min;
  */
 public class UpdateAirplaneCapacityDTO {
     
-    private Long airplaneId;
+    private Long id;
     
     @Min(0)
     private int capacity;
 
-    public Long getAirplaneId() {
-        return airplaneId;
+    public Long getId() {
+        return id;
     }
 
-    public void setAirplaneId(Long airplaneId) {
-        this.airplaneId = airplaneId;
+    public void setId(Long airplaneId) {
+        this.id = airplaneId;
     }
 
     public int getCapacity() {
@@ -38,7 +38,7 @@ public class UpdateAirplaneCapacityDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.airplaneId);
+        hash = 29 * hash + Objects.hashCode(this.id);
         hash = 29 * hash + this.capacity;
         return hash;
     }
@@ -52,7 +52,7 @@ public class UpdateAirplaneCapacityDTO {
             return false;
         }
         final UpdateAirplaneCapacityDTO other = (UpdateAirplaneCapacityDTO) obj;
-        if (!Objects.equals(this.airplaneId, other.airplaneId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return this.capacity == other.capacity;
@@ -60,7 +60,7 @@ public class UpdateAirplaneCapacityDTO {
 
     @Override
     public String toString() {
-        return "UpdateAirplaneCapacityDTO{" + "airplaneId=" + airplaneId 
+        return "UpdateAirplaneCapacityDTO{" + "id=" + id 
                 + ", capacity=" + capacity + '}';
     }  
 }

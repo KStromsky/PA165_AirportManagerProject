@@ -18,6 +18,7 @@ import java.util.List;
  */
 public interface AirplaneFacade {
     public AirplaneDTO getAirplaneWithId(Long id);
+    public UpdateAirplaneCapacityDTO getUpdateAirplaneCapacityWithId(Long id);
     public List<AirplaneDTO> getAllAirplanes();
     public List<AirplaneDTO> getAirplaneWithName(String name);
     public Long createAirplane(AirplaneCreationalDTO a);

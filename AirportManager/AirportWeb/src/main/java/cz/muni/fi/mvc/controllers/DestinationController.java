@@ -96,7 +96,7 @@ public class DestinationController {
      */
     @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
     public String editDestination(@PathVariable("id") long id, Model model) {
-        model.addAttribute("destination", destinationFacade.getDestinationWithId(id));
+        model.addAttribute("destination", destinationFacade.getUpdateDestinationLocationWithId(id));
         return "destination/edit";
     }
     
@@ -109,7 +109,18 @@ public class DestinationController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String updateDestination(@PathVariable("id") long id, @Valid @ModelAttribute("destination") UpdateDestinationLocationDTO updatedDestination, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
-         
+        
+        if (bindingResult.hasErrors()) {
+            for (FieldError fe : bindingResult.getFieldErrors()) {
+                model.addAttribute(fe.getField() + "_error", true);
+                log.trace("FieldError: {}", fe);
+            }
+            for (ObjectError ge : bindingResult.getGlobalErrors()) {
+                log.trace("ObjectError: {}", ge);
+            }
+            return "destination/edit";
+        }
+        
         if ((updatedDestination.getLocation()).equals("")){
             redirectAttributes.addFlashAttribute("alert_danger", "Location of destination is empty");
             return "redirect:" + uriBuilder.path("/destination/edit/{id}").buildAndExpand(id).encode().toUriString();
