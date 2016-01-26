@@ -12,7 +12,7 @@
     <form:form method="post" action="${pageContext.request.contextPath}/destination/update/${destination.id}"
                modelAttribute="destination" cssClass="form-horizontal">
 
-        <div class="form-group ${name_error?'has-error':''}">
+        <div class="form-group ${location_error?'has-error':''}">
             <form:label path="location" cssClass="col-sm-2 control-label">Destination</form:label>
             <div class="col-sm-10">
                 <form:input path="location" cssClass="form-control"/>
