@@ -107,25 +107,20 @@ public class DestinationController {
      * @return JSP page
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String updateDestination(@PathVariable("id") long id, @Valid @ModelAttribute("destination") DestinationDTO updatedDestination, BindingResult bindingResult,
+    public String updateDestination(@PathVariable("id") long id, @Valid @ModelAttribute("destination") UpdateDestinationLocationDTO updatedDestination, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder){
          
         if ((updatedDestination.getLocation()).equals("")){
-            redirectAttributes.addFlashAttribute("alert_info", "Location of destination is empty");
+            redirectAttributes.addFlashAttribute("alert_danger", "Location of destination is empty");
             return "redirect:" + uriBuilder.path("/destination/edit/{id}").buildAndExpand(id).encode().toUriString();
         }
         
-        if (destinationFacade.getAllDestinations().contains(updatedDestination)){
-            redirectAttributes.addFlashAttribute("alert_info", "Location of destination already exists");
+        try{
+            destinationFacade.updateDestinationLocation(updatedDestination);
+        }catch(Exception ex){
+            redirectAttributes.addFlashAttribute("alert_danger", "Destination " + id + " wasn't updated because location already exists");
             return "redirect:" + uriBuilder.path("/destination/edit/{id}").buildAndExpand(id).encode().toUriString();
         }
-        
-        DestinationDTO destination = destinationFacade.getDestinationWithId(id);
-        UpdateDestinationLocationDTO destination2 = new UpdateDestinationLocationDTO();
-        destination2.setId(destination.getId());
-        destination2.setLocation(updatedDestination.getLocation());
-        destinationFacade.updateDestinationLocation(destination2);
-
         redirectAttributes.addFlashAttribute("alert_success", "Destination " + id + " was updated");
         return "redirect:" + uriBuilder.path("/destination").toUriString();
     }
